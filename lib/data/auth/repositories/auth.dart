@@ -9,9 +9,8 @@ class AuthRepositoryImpl extends AuthRepository{
   }
 
   @override
-  Future<bool> isLoggedIn() {
-    // TODO: implement isLoggedIn
-    throw UnimplementedError();
+  Future<bool> isLoggedIn() async{
+    return true;
   }
 
 
