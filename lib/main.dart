@@ -4,6 +4,8 @@ import 'package:posix/presentation/splash/bloc/splash_cubit.dart';
 import 'package:posix/presentation/splash/pages/splash.dart';
 import 'package:posix/service_locator.dart';
 
+import 'core/configs/theme/app_theme.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   setupServiceLocator();
@@ -16,13 +18,12 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SplashCubit()..appStarted(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: const SplashPage(),
-
-      ),
-    );
+        create: (context) => SplashCubit()..appStarted(),
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: const SplashPage(),
+          theme: AppTheme.appTheme,
+        ));
   }
 }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:posix/presentation/auth/pages/auth.dart';
 import 'package:posix/presentation/splash/bloc/splash_cubit.dart';
 import 'package:posix/presentation/splash/bloc/splash_state.dart';
 
@@ -14,7 +15,11 @@ class SplashPage extends StatelessWidget {
       body: BlocListener<SplashCubit, SplashState>(
         listener: (context, state) {
           if (state is UnAuthenticated) {
-            Center(child: Text('You have to authenticate'));
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Auth(),
+                ));
           } else if (state is Authenticated) {
             Center(child: Text('Authenticated'));
           }
@@ -24,14 +29,15 @@ class SplashPage extends StatelessWidget {
             Container(
               decoration: const BoxDecoration(
                   image: DecorationImage(
+                      fit: BoxFit.cover,
                       image: AssetImage(AppImages.splashImage))),
             ),
             Container(
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
-                    const Color(0xff1A1B20).withOpacity(0),
-                    const Color(0xff1A1B20)
-                  ])),
+                const Color(0xFFFF9900).withOpacity(0),
+                const Color(0xFFFF9900)
+              ])),
             ),
             Container(
               decoration: BoxDecoration(
@@ -39,8 +45,8 @@ class SplashPage extends StatelessWidget {
                     begin: Alignment.center,
                     end: Alignment.bottomCenter,
                     colors: [
-                      const Color(0xff1A1B20).withOpacity(0),
-                      const Color(0xff1A1B20),
+                      const Color(0xffffffff).withOpacity(0),
+                      const Color(0xFFFF9900),
                     ]),
               ),
             )
