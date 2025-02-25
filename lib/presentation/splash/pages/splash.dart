@@ -1,57 +1,56 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:posix/presentation/auth/pages/auth.dart';
-import 'package:posix/presentation/splash/bloc/splash_cubit.dart';
-import 'package:posix/presentation/splash/bloc/splash_state.dart';
+import 'package:posix/presentation/splash/pages/splash_controller.dart';
 
 import '../../../core/configs/assets/app_images.dart';
 
-class SplashPage extends StatelessWidget {
+class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
+
+  @override
+  State<SplashPage> createState() => _SplashPageState();
+}
+
+class _SplashPageState extends State<SplashPage> {
+  late SplashController splashController;
+
+  @override
+  void initState() {
+    super.initState();
+    splashController = SplashController(context);
+    splashController.startTimer();
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<SplashCubit, SplashState>(
-        listener: (context, state) {
-          if (state is UnAuthenticated) {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Auth(),
-                ));
-          } else if (state is Authenticated) {
-            Center(child: Text('Authenticated'));
-          }
-        },
-        child: Stack(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage(AppImages.splashImage))),
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage(AppImages.splashImage))),
+          ),
+          Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [
+              const Color(0xFFFF9900).withOpacity(0),
+              const Color(0xFFFF9900)
+            ])),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.center,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    const Color(0xffffffff).withOpacity(0),
+                    const Color(0xFFFF9900),
+                  ]),
             ),
-            Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                const Color(0xFFFF9900).withOpacity(0),
-                const Color(0xFFFF9900)
-              ])),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.center,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      const Color(0xffffffff).withOpacity(0),
-                      const Color(0xFFFF9900),
-                    ]),
-              ),
-            )
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
