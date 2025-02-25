@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
+import 'package:local_auth/local_auth.dart';
 
 abstract class AuthRepository{
-  Future<Either> signin(params);
-  Future<bool> isLoggedIn();
+  Future<bool> canCheckBiometrics();
+  Future<List<BiometricType>> getAvailableBiometrics();
+  Future<bool> authenticate();
 
 }
