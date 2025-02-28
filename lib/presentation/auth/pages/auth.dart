@@ -54,6 +54,11 @@ class _AuthState extends State<Auth> {
     });
   }
 
+  Future<void> _auth() async{
+     //stop here
+     //should implement bloc and sl
+  }
+
   Future<void> _authenticate() async {
     bool authenticated = false;
     try {
