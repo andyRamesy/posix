@@ -1,6 +1,7 @@
 part of 'auth_cubit.dart';
 
-@immutable
-sealed class AuthState {}
+abstract class CheckBiometricsSupportState{}
 
-final class AuthInitial extends AuthState {}
+class Supported extends CheckBiometricsSupportState{}
+class Unsupported extends CheckBiometricsSupportState{}
+class Unknown extends CheckBiometricsSupportState{}

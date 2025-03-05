@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:posix/presentation/auth/bloc/auth_cubit.dart';
 
 class Auth extends StatefulWidget {
   const Auth({super.key});
@@ -90,56 +92,65 @@ class _AuthState extends State<Auth> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        children: [
-          Column(
-            children: [
-              if (_supportState == _SupportState.unknown)
-                CircularProgressIndicator()
-              else if (_supportState == _SupportState.supported)
-                const Text('This is supported')
-              else
-                const Text('This is not supported'),
-              const Divider(height: 100),
-              Text('Can check biometrics: $_canCheckBiometrics\n'),
-              ElevatedButton(
-                onPressed: _checkBiometrics,
-                child: const Text('Check biometrics'),
-              ),
-              const Divider(height: 100),
-              Text('Available biometrics: $_availableBiometrics\n'),
-              ElevatedButton(
-                onPressed: _getAvailableBiometrics,
-                child: const Text('Get available biometrics'),
-              ),
-              const Divider(height: 100),
-              Text('Current State: $_authorized\n'),
-              if (_isAuthenticating)
-                ElevatedButton(
-                    onPressed: () {},
-                    child: Row(mainAxisSize: MainAxisSize.min, children: [
-                      Text(_isAuthenticating ? 'Cancel' : 'Authenticate'),
-                    ]))
-              else
-                Column(
-                  children: [
-                    ElevatedButton(
-                      onPressed: _authenticate,
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text('Authenticate'),
-                          Icon(Icons.perm_device_information),
-                        ],
-                      ),
-                    ),
-                  ],
-                )
-            ],
-          )
-        ],
+      body: BlocListener<AuthCubit, CheckBiometricsSupportState>(
+        listener: (context, state) {
+          if (state is Supported) {
+            print("supported");
+          }
+        },
       ),
     );
+    // return Scaffold(
+    //   body: ListView(
+    //     children: [
+    //       Column(
+    //         children: [
+    //           if (_supportState == _SupportState.unknown)
+    //             CircularProgressIndicator()
+    //           else if (_supportState == _SupportState.supported)
+    //             const Text('This is supported')
+    //           else if (_supportState == _SupportState.unsupported)
+    //             const Text('This is not supported'),
+    //           const Divider(height: 100),
+    //           Text('Can check biometrics: $_canCheckBiometrics\n'),
+    //           ElevatedButton(
+    //             onPressed: _checkBiometrics,
+    //             child: const Text('Check biometrics'),
+    //           ),
+    //           const Divider(height: 100),
+    //           Text('Available biometrics: $_availableBiometrics\n'),
+    //           ElevatedButton(
+    //             onPressed: _getAvailableBiometrics,
+    //             child: const Text('Get available biometrics'),
+    //           ),
+    //           const Divider(height: 100),
+    //           Text('Current State: $_authorized\n'),
+    //           if (_isAuthenticating)
+    //             ElevatedButton(
+    //                 onPressed: () {},
+    //                 child: Row(mainAxisSize: MainAxisSize.min, children: [
+    //                   Text(_isAuthenticating ? 'Cancel' : 'Authenticate'),
+    //                 ]))
+    //           else
+    //             Column(
+    //               children: [
+    //                 ElevatedButton(
+    //                   onPressed: _authenticate,
+    //                   child: const Row(
+    //                     mainAxisSize: MainAxisSize.min,
+    //                     children: <Widget>[
+    //                       Text('Authenticate'),
+    //                       Icon(Icons.perm_device_information),
+    //                     ],
+    //                   ),
+    //                 ),
+    //               ],
+    //             )
+    //         ],
+    //       )
+    //     ],
+    //   ),
+    // );
   }
 }
 
