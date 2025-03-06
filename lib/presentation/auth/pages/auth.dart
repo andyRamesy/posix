@@ -14,11 +14,7 @@ class Auth extends StatefulWidget {
 class _AuthState extends State<Auth> {
   final LocalAuthentication auth = LocalAuthentication();
   bool _isBiometricAvailable = false;
-
-  bool? _canCheckBiometrics = false;
-  List<BiometricType>? _availableBiometrics;
-  String _authorized = 'Not Authorized';
-  bool _isAuthenticating = false;
+  bool _isAuthenticated = false;
 
   @override
   void initState() {
@@ -26,7 +22,7 @@ class _AuthState extends State<Auth> {
     isBiometricAvailable();
   }
 
-  isBiometricAvailable() async {
+  Future<bool> isBiometricAvailable() async {
     bool isBiometricAvailable =
         await BiometricAuth().isDeviceSupported().then((bool value) {
       setState(() => _isBiometricAvailable = value);
@@ -39,29 +35,17 @@ class _AuthState extends State<Auth> {
   Future<void> _authenticate() async {
     bool authenticated = false;
     try {
-      setState(() {
-        _isAuthenticating = true;
-        _authorized = "Authenticating";
-      });
       authenticated = await auth.authenticate(
-        localizedReason: "The OS choose auth method",
+        localizedReason: "Please authenticate to continue...",
         options: const AuthenticationOptions(stickyAuth: true),
       );
       setState(() {
-        _isAuthenticating = false;
+        _isAuthenticated = authenticated;
       });
     } on PlatformException catch (e) {
       print("authenticate has error: $e");
-      setState(() {
-        _isAuthenticating = false;
-        _authorized = 'Error - ${e.message}';
-      });
-      return;
+      throw Exception(e);
     }
-    if (!mounted) return;
-
-    setState(
-        () => _authorized = authenticated ? 'Authorized' : "not Authorized");
   }
 
   Widget showBiometricUnavailability() {
@@ -92,7 +76,12 @@ class _AuthState extends State<Auth> {
       body: Center(
         child: !_isBiometricAvailable
             ? showBiometricUnavailability()
-            : Container(),
+            : FutureBuilder<void>(
+                future: _authenticate(),
+                builder: (context, snapshot) {
+                  return const CircularProgressIndicator();
+                },
+              ),
       ),
     );
   }
