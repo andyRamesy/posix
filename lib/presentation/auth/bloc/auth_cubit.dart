@@ -9,4 +9,6 @@ class AuthCubit extends Cubit<AuthState> {
   void appStart() async {
     
   }
+
+
 }
