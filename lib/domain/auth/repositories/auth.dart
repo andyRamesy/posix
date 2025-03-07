@@ -5,5 +5,5 @@ abstract class AuthRepository{
   Future<bool> canCheckBiometrics();
   Future<List<BiometricType>> getAvailableBiometrics();
   Future<bool> authenticate();
-
+  Future<bool> isDeviceSupported();
 }

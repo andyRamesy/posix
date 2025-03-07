@@ -6,10 +6,13 @@ abstract class AuthService {
   Future<bool> authenticate();
   Future<bool> canCheckBiometrics();
   Future<List<BiometricType>> getAvailableBiometrics();
+  Future<bool> isDeviceSupported();
 }
 
 class AuthApiServiceImpl extends AuthService {
   final LocalAuthentication auth = LocalAuthentication();
+
+
 
   @override
   Future<bool> authenticate() async {
@@ -18,7 +21,8 @@ class AuthApiServiceImpl extends AuthService {
           localizedReason: "The OS choose auth method");
     } on PlatformException catch (e) {
       print("error on authenticate : $e");
-      return false;
+      throw Exception(e);
+
     }
   }
 
@@ -40,5 +44,10 @@ class AuthApiServiceImpl extends AuthService {
       print("on getAvailableBiometrics : $error");
       return [];
     }
+  }
+  
+  @override
+  Future<bool> isDeviceSupported() async{
+    return await auth.isDeviceSupported();
   }
 }
