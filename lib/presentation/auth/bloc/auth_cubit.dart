@@ -17,4 +17,6 @@ class AuthCubit extends Cubit<CheckBiometricsSupportState> {
       }
     });
   }
+
+
 }

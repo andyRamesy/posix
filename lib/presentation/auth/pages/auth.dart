@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:posix/presentation/auth/bloc/auth_cubit.dart';
+import 'package:posix/core/configs/theme/app_color.dart';
+import 'package:posix/core/utils/biometric_auth.dart';
 
 class Auth extends StatefulWidget {
   const Auth({super.key});
@@ -13,91 +14,75 @@ class Auth extends StatefulWidget {
 
 class _AuthState extends State<Auth> {
   final LocalAuthentication auth = LocalAuthentication();
-  _SupportState _supportState = _SupportState.unknown;
-  bool? _canCheckBiometrics = false;
-  List<BiometricType>? _availableBiometrics;
-  String _authorized = 'Not Authorized';
-  bool _isAuthenticating = false;
+  bool _isBiometricAvailable = false;
+  bool _isAuthenticated = false;
 
   @override
   void initState() {
     super.initState();
-    auth.isDeviceSupported().then(
-          (bool isSupported) => setState(() => _supportState = isSupported
-              ? _SupportState.supported
-              : _SupportState.unsupported),
-        );
+    isBiometricAvailable();
   }
 
-  Future<void> _checkBiometrics() async {
-    late bool canCheckBiometrics;
-    try {
-      canCheckBiometrics = await auth.canCheckBiometrics;
-    } on PlatformException catch (e) {
-      canCheckBiometrics = false;
-      print("error on check biometrics : $e");
-    }
-    if (!mounted) return;
-    setState(() {
-      _canCheckBiometrics = canCheckBiometrics;
+  Future<bool> isBiometricAvailable() async {
+    bool isBiometricAvailable =
+        await BiometricAuth().isDeviceSupported().then((bool value) {
+      setState(() => _isBiometricAvailable = value);
+      return value;
     });
-  }
 
-  Future<void> _getAvailableBiometrics() async {
-    List<BiometricType>? availableBiometrics;
-    try {
-      availableBiometrics = await auth.getAvailableBiometrics();
-    } on PlatformException catch (e) {
-      print("error on get available biometrics : $e");
-    }
-    if (!mounted) return;
-    setState(() {
-      _availableBiometrics = availableBiometrics;
-    });
-  }
-
-  Future<void> _auth() async{
-     //stop here
-     //should implement bloc and sl
+    return isBiometricAvailable;
   }
 
   Future<void> _authenticate() async {
     bool authenticated = false;
     try {
-      setState(() {
-        _isAuthenticating = true;
-        _authorized = "Authenticating";
-      });
       authenticated = await auth.authenticate(
-        localizedReason: "The OS choose auth method",
+        localizedReason: "Please authenticate to continue...",
         options: const AuthenticationOptions(stickyAuth: true),
       );
       setState(() {
-        _isAuthenticating = false;
+        _isAuthenticated = authenticated;
       });
     } on PlatformException catch (e) {
       print("authenticate has error: $e");
-      setState(() {
-        _isAuthenticating = false;
-        _authorized = 'Error - ${e.message}';
-      });
-      return;
+      throw Exception(e);
     }
-    if (!mounted) return;
+  }
 
-    setState(
-        () => _authorized = authenticated ? 'Authorized' : "not Authorized");
+  Widget showBiometricUnavailability() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.cardBackground,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.fingerprint, size: 32, color: AppColors.primary),
+          const SizedBox(width: 12),
+          Text(
+            'Biometric Unavailability',
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<AuthCubit, CheckBiometricsSupportState>(
-        listener: (context, state) {
-          if (state is Supported) {
-            print("supported");
-          }
-        },
+      body: Center(
+        child: !_isBiometricAvailable
+            ? showBiometricUnavailability()
+            : FutureBuilder<void>(
+                future: _authenticate(),
+                builder: (context, snapshot) {
+                  return const CircularProgressIndicator();
+                },
+              ),
       ),
     );
     // return Scaffold(
@@ -152,10 +137,4 @@ class _AuthState extends State<Auth> {
     //   ),
     // );
   }
-}
-
-enum _SupportState {
-  unknown,
-  supported,
-  unsupported,
 }

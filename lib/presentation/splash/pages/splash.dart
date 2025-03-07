@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:posix/presentation/splash/pages/splash_controller.dart';
+import 'package:posix/presentation/splash/pages/controller/splash_controller.dart';
 
 import '../../../core/configs/assets/app_images.dart';
 
