@@ -17,9 +17,8 @@ void setupServiceLocator() {
   //respositories
   sl.registerSingleton<AuthRepository>(AuthRepositoryImpl());
   sl.registerFactory<BiometricAuthCubit>(() => BiometricAuthCubit());
-  sl.registerFactory<AuthenticateUseCase>(() => AuthenticateUseCase());
 
   //usecases
   sl.registerSingleton<IsDeviceSupportedUseCase>(IsDeviceSupportedUseCase());
-  sl.registerSingleton<AuthenticateUseCase>(AuthenticateUseCase());
+  sl.registerFactory<AuthenticateUseCase>(() => AuthenticateUseCase());
 }

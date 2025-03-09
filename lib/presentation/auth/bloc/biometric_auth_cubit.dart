@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:posix/domain/auth/usecases/authenticate.dart';
 import 'package:posix/domain/auth/usecases/isDeviceSupported.dart';
 import 'package:posix/service_locator.dart';
 
@@ -9,11 +10,19 @@ class BiometricAuthCubit extends Cubit<BiometricAuthState> {
 
   Future<void> isDeviceSupported() async{
     bool response = await sl<IsDeviceSupportedUseCase>().call(false);
-    if(false){
+    if(response){
       emit(BiometricAvailable());
     }else{
       emit(BiometricNotAvailable());
     }
   }
+
+  Future<void> authenticate() async{  
+    bool response = await sl<AuthenticateUseCase>().call(false);
+    if(response){
+      emit(BiometricSuccess());
+    }else{
+      emit(BiometricFailure("Authentication failed"));
+    }
+  }
 }
-  

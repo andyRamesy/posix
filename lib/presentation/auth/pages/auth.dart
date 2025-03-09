@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:posix/core/configs/theme/app_color.dart';
 import 'package:posix/core/utils/biometric_auth.dart';
+import 'package:posix/domain/auth/usecases/authenticate.dart';
 import 'package:posix/presentation/auth/bloc/biometric_auth_cubit.dart';
 import 'package:posix/service_locator.dart';
 
@@ -37,15 +38,19 @@ class Auth extends StatelessWidget {
     return BlocProvider(
       create: (_) => sl<BiometricAuthCubit>()..isDeviceSupported(),
       child: Scaffold(
-        body: BlocBuilder<BiometricAuthCubit, BiometricAuthState>(
-          builder: (context, state) {
-            if (state is BiometricNotAvailable) {
-              return Center(child: showBiometricUnavailability(context));
-            } else {
-              return const Text("Hello");
-            }
-          },
-        ),
+        body: BlocConsumer<BiometricAuthCubit, BiometricAuthState>(
+            listener: (context, state) {
+          if (state is BiometricSuccess) {
+            print("auth success");
+          }
+        }, builder: (BuildContext context, BiometricAuthState state) {
+          if (state is BiometricLoading) {
+            print("biometric loading");
+          } else if (state is BiometricFailure) {
+            print("biometric failure");
+          }
+          return Container();
+        }),
       ),
     );
   }
