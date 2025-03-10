@@ -5,6 +5,8 @@ import 'package:posix/service_locator.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
 
+  
+
   @override
   Future<bool> authenticate() async{
     var res = await sl<AuthService>().authenticate();
@@ -21,6 +23,11 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<List<BiometricType>> getAvailableBiometrics() {
     var res = sl<AuthService>().getAvailableBiometrics();
     return res;
+  }
+  
+  @override
+  Future<bool> isDeviceSupported() {
+    
   }
   
 }
