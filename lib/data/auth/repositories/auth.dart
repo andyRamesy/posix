@@ -26,8 +26,9 @@ class AuthRepositoryImpl extends AuthRepository {
   }
   
   @override
-  Future<bool> isDeviceSupported() {
-    
+  Future<bool> isDeviceSupported() async{
+    var res = await sl<AuthService>().isDeviceSupported();
+    return res;
   }
   
 }

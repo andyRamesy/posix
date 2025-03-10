@@ -4,52 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:posix/core/configs/theme/app_color.dart';
 import 'package:posix/core/utils/biometric_auth.dart';
+import 'package:posix/domain/auth/usecases/authenticate.dart';
+import 'package:posix/presentation/auth/bloc/biometric_auth_cubit.dart';
+import 'package:posix/service_locator.dart';
 
-class Auth extends StatefulWidget {
+class Auth extends StatelessWidget {
   const Auth({super.key});
 
-  @override
-  State<Auth> createState() => _AuthState();
-}
-
-class _AuthState extends State<Auth> {
-  final LocalAuthentication auth = LocalAuthentication();
-  bool _isBiometricAvailable = false;
-  bool _isAuthenticated = false;
-
-  @override
-  void initState() {
-    super.initState();
-    isBiometricAvailable();
-  }
-
-  Future<bool> isBiometricAvailable() async {
-    bool isBiometricAvailable =
-        await BiometricAuth().isDeviceSupported().then((bool value) {
-      setState(() => _isBiometricAvailable = value);
-      return value;
-    });
-
-    return isBiometricAvailable;
-  }
-
-  Future<void> _authenticate() async {
-    bool authenticated = false;
-    try {
-      authenticated = await auth.authenticate(
-        localizedReason: "Please authenticate to continue...",
-        options: const AuthenticationOptions(stickyAuth: true),
-      );
-      setState(() {
-        _isAuthenticated = authenticated;
-      });
-    } on PlatformException catch (e) {
-      print("authenticate has error: $e");
-      throw Exception(e);
-    }
-  }
-
-  Widget showBiometricUnavailability() {
+  Widget showBiometricUnavailability(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -73,16 +35,22 @@ class _AuthState extends State<Auth> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: !_isBiometricAvailable
-            ? showBiometricUnavailability()
-            : FutureBuilder<void>(
-                future: _authenticate(),
-                builder: (context, snapshot) {
-                  return const CircularProgressIndicator();
-                },
-              ),
+    return BlocProvider(
+      create: (_) => sl<BiometricAuthCubit>()..isDeviceSupported(),
+      child: Scaffold(
+        body: BlocConsumer<BiometricAuthCubit, BiometricAuthState>(
+            listener: (context, state) {
+          if (state is BiometricSuccess) {
+            print("auth success");
+          }
+        }, builder: (BuildContext context, BiometricAuthState state) {
+          if (state is BiometricLoading) {
+            print("biometric loading");
+          } else if (state is BiometricFailure) {
+            print("biometric failure");
+          }
+          return Container();
+        }),
       ),
     );
     // return Scaffold(

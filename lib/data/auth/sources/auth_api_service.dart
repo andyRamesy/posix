@@ -11,16 +11,19 @@ abstract class AuthService {
 class AuthApiServiceImpl extends AuthService {
   final LocalAuthentication auth = LocalAuthentication();
 
-  
 
   @override
   Future<bool> authenticate() async {
     try {
       return await auth.authenticate(
-          localizedReason: "The OS choose auth method");
+          localizedReason: "The OS choose auth method",
+          options: AuthenticationOptions(
+            stickyAuth: true,
+          )
+        );
     } on PlatformException catch (e) {
       print("error on authenticate : $e");
-      return false;
+      throw Exception(e);
     }
   }
 
@@ -45,7 +48,7 @@ class AuthApiServiceImpl extends AuthService {
   }
   
   @override
-  Future<bool> isDeviceSupported() async {
+  Future<bool> isDeviceSupported() async{
     return await auth.isDeviceSupported();
   }
 }
