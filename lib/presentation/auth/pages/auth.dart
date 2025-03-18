@@ -69,9 +69,16 @@ class _AuthState extends State<Auth> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-      child: authBtn(context),
-    ));
+
+    return BlocProvider(
+      create: (_) {
+        final value = sl<BiometricAuthCubit>();
+        value.isDeviceSupported();
+        return value;
+      },
+      child: Scaffold(
+        body: Center(child: authBtn(context)),
+      ),
+    );
   }
 }
