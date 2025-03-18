@@ -57,57 +57,6 @@ class _AuthState extends State<Auth> {
       },
       child: const Text("Authenticate"),
     );
-    // return Scaffold(
-    //   body: ListView(
-    //     children: [
-    //       Column(
-    //         children: [
-    //           if (_supportState == _SupportState.unknown)
-    //             CircularProgressIndicator()
-    //           else if (_supportState == _SupportState.supported)
-    //             const Text('This is supported')
-    //           else if (_supportState == _SupportState.unsupported)
-    //             const Text('This is not supported'),
-    //           const Divider(height: 100),
-    //           Text('Can check biometrics: $_canCheckBiometrics\n'),
-    //           ElevatedButton(
-    //             onPressed: _checkBiometrics,
-    //             child: const Text('Check biometrics'),
-    //           ),
-    //           const Divider(height: 100),
-    //           Text('Available biometrics: $_availableBiometrics\n'),
-    //           ElevatedButton(
-    //             onPressed: _getAvailableBiometrics,
-    //             child: const Text('Get available biometrics'),
-    //           ),
-    //           const Divider(height: 100),
-    //           Text('Current State: $_authorized\n'),
-    //           if (_isAuthenticating)
-    //             ElevatedButton(
-    //                 onPressed: () {},
-    //                 child: Row(mainAxisSize: MainAxisSize.min, children: [
-    //                   Text(_isAuthenticating ? 'Cancel' : 'Authenticate'),
-    //                 ]))
-    //           else
-    //             Column(
-    //               children: [
-    //                 ElevatedButton(
-    //                   onPressed: _authenticate,
-    //                   child: const Row(
-    //                     mainAxisSize: MainAxisSize.min,
-    //                     children: <Widget>[
-    //                       Text('Authenticate'),
-    //                       Icon(Icons.perm_device_information),
-    //                     ],
-    //                   ),
-    //                 ),
-    //               ],
-    //             )
-    //         ],
-    //       )
-    //     ],
-    //   ),
-    // );
   }
 
   Future<void> _auth() async {
@@ -120,16 +69,9 @@ class _AuthState extends State<Auth> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: authBtn(context)));
-    // return BlocProvider(
-    //   create: (_) {
-    //     final value = sl<BiometricAuthCubit>();
-    //     value.isDeviceSupported();
-    //     return value;
-    //   },
-    //   child: Scaffold(
-    //     body: Center(child: authBtn(context)),
-    //   ),
-    // );
+    return Scaffold(
+        body: Center(
+      child: authBtn(context),
+    ));
   }
 }
