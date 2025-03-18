@@ -4,7 +4,7 @@ import 'package:posix/service_locator.dart';
 
 class AuthenticateUseCase extends UseCase {
   @override
-  Future call(params) {
-    return sl<AuthRepository>().authenticate();
+  Future<bool> call(params) async{
+    return await sl<AuthRepository>().authenticate();
   }
 }

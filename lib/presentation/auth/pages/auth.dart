@@ -8,8 +8,15 @@ import 'package:posix/domain/auth/usecases/authenticate.dart';
 import 'package:posix/presentation/auth/bloc/biometric_auth_cubit.dart';
 import 'package:posix/service_locator.dart';
 
-class Auth extends StatelessWidget {
+class Auth extends StatefulWidget {
   const Auth({super.key});
+
+  @override
+  State<Auth> createState() => _AuthState();
+}
+
+class _AuthState extends State<Auth> {
+  final LocalAuthentication auth = LocalAuthentication();
 
   Widget showBiometricUnavailability(BuildContext context) {
     return Container(
@@ -33,25 +40,22 @@ class Auth extends StatelessWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => sl<BiometricAuthCubit>()..isDeviceSupported(),
-      child: Scaffold(
-        body: BlocConsumer<BiometricAuthCubit, BiometricAuthState>(
-            listener: (context, state) {
-          if (state is BiometricSuccess) {
-            print("auth success");
-          }
-        }, builder: (BuildContext context, BiometricAuthState state) {
-          if (state is BiometricLoading) {
-            print("biometric loading");
-          } else if (state is BiometricFailure) {
-            print("biometric failure");
-          }
-          return Container();
-        }),
-      ),
+  authenticate(BuildContext context) async {
+    var res = await sl<AuthenticateUseCase>().call(true);
+    if (res) {
+      print("auth success $res");
+    } else {
+      print("auth failed $res");
+    }
+  }
+
+  Widget authBtn(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        _auth();
+        // authenticate(context);
+      },
+      child: const Text("Authenticate"),
     );
     // return Scaffold(
     //   body: ListView(
@@ -102,6 +106,29 @@ class Auth extends StatelessWidget {
     //         ],
     //       )
     //     ],
+    //   ),
+    // );
+  }
+
+  Future<void> _auth() async {
+    bool authenticate = false;
+    authenticate = await auth.authenticate(
+        localizedReason: "The OS choose auth method",
+        options: AuthenticationOptions(useErrorDialogs: true));
+    print("value $authenticate");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(body: Center(child: authBtn(context)));
+    // return BlocProvider(
+    //   create: (_) {
+    //     final value = sl<BiometricAuthCubit>();
+    //     value.isDeviceSupported();
+    //     return value;
+    //   },
+    //   child: Scaffold(
+    //     body: Center(child: authBtn(context)),
     //   ),
     // );
   }

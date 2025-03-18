@@ -15,12 +15,13 @@ class AuthApiServiceImpl extends AuthService {
   @override
   Future<bool> authenticate() async {
     try {
-      return await auth.authenticate(
+      var res = await auth.authenticate(
           localizedReason: "The OS choose auth method",
           options: AuthenticationOptions(
-            stickyAuth: true,
+            useErrorDialogs: true
           )
         );
+        return res;
     } on PlatformException catch (e) {
       print("error on authenticate : $e");
       throw Exception(e);
