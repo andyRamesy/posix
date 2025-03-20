@@ -6,6 +6,7 @@ import 'package:posix/core/configs/theme/app_color.dart';
 import 'package:posix/core/utils/biometric_auth.dart';
 import 'package:posix/domain/auth/usecases/authenticate.dart';
 import 'package:posix/presentation/auth/bloc/biometric_auth_cubit.dart';
+import 'package:posix/presentation/auth/widgets/auth_card.dart';
 import 'package:posix/service_locator.dart';
 
 class Auth extends StatefulWidget {
@@ -50,12 +51,14 @@ class _AuthState extends State<Auth> {
   }
 
   Widget authBtn(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        _auth();
-        // authenticate(context);
-      },
-      child: const Text("Authenticate"),
+    return AuthCard(
+      child: ElevatedButton(
+        onPressed: () {
+          _auth();
+          // authenticate(context);
+        },
+        child: const Text("Authenticate"),
+      ),
     );
   }
 
