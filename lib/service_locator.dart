@@ -12,12 +12,11 @@ final sl = GetIt.instance;
 void setupServiceLocator() {
   //services
   sl.registerSingleton<AuthService>(AuthApiServiceImpl());
-  sl.registerLazySingleton(() => LocalAuthentication());
+  sl.registerSingleton(() => LocalAuthentication());
 
   //respositories
   sl.registerSingleton<AuthRepository>(AuthRepositoryImpl());
 
   //usecases
   sl.registerSingleton<IsDeviceSupportedUseCase>(IsDeviceSupportedUseCase());
-  sl.registerFactory<AuthenticateUseCase>(() => AuthenticateUseCase());
 }

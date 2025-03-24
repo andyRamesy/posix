@@ -11,7 +11,7 @@ class SplashController {
          Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => Auth(),
+          builder: (context) => AuthPage(),
         ));
       }
     });
