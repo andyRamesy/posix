@@ -16,4 +16,13 @@ class BiometricAuthCubit extends Cubit<BiometricAuthState> {
       emit(BiometricNotAvailable());
     }
   }
+
+  Future<void> authenticate() async {
+    bool response = await sl<AuthenticateUseCase>().call(false);
+    if (response) {
+      emit(BiometricSuccess());
+    } else {
+      emit(BiometricFailure("Authentication failed"));
+    }
+  }
 }

@@ -7,14 +7,9 @@ import 'package:posix/presentation/auth/bloc/biometric_auth_cubit.dart';
 import 'package:posix/presentation/auth/widgets/auth_card.dart';
 import 'package:posix/service_locator.dart';
 
-class AuthPage extends StatefulWidget {
+class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
 
-  @override
-  State<AuthPage> createState() => _AuthState();
-}
-
-class _AuthState extends State<AuthPage> {
   Widget showBiometricUnavailability(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -37,34 +32,39 @@ class _AuthState extends State<AuthPage> {
     );
   }
 
-  // Future<void> _auth() async {
-  //   bool authenticate = await auth.authenticate(
-  //     localizedReason: "The OS choose auth method",
-  //     options: const AuthenticationOptions(useErrorDialogs: true),
-  //   );
-  //   print("value $authenticate");
-  // }
+    authenticate(BuildContext context) async {
+    var res = await sl<AuthenticateUseCase>().call(true);
+    if (res) {
+      print("auth success $res");
+    } else {
+      print("auth failed $res");
+    }
+  }
 
-  // Widget authBtn(BuildContext context) {
-  //   return AuthCard(
-  //     child: ElevatedButton(
-  //       onPressed: () => _auth(),
-  //       child: const Text("Authenticate"),
-  //     ),
-  //   );
-  // }
+  Widget authBtn(BuildContext context) {
+    return AuthCard(
+      child: ElevatedButton(
+        onPressed: () {
+          authenticate(context);
+        },
+        child: const Text("Authenticate"),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<BiometricAuthCubit, BiometricAuthState>(
-          listener: (context, state) {
-            if(state is BiometricNotAvailable){
-              print("not");
-            }else {
-              print("ok");
-            }
-          },child: Center(child: Text("ok"),)),
+      body:  BlocBuilder<BiometricAuthCubit, BiometricAuthState>(
+        builder: (context, state) {
+          if (state is BiometricNotAvailable) {
+            return Center(child: showBiometricUnavailability(context));
+          }else if (state is BiometricAvailable){
+            return Center(child: Text("ici"),);
+          }
+          return Container();
+        },
+      ),
     );
   }
 }
