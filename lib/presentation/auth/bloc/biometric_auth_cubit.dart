@@ -17,7 +17,7 @@ class BiometricAuthCubit extends Cubit<BiometricAuthState> {
     }
   }
 
-  Future<void> authenticate() async {
+  void authenticate() async {
     bool response = await sl<AuthenticateUseCase>().call(false);
     if (response) {
       emit(BiometricSuccess());

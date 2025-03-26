@@ -6,4 +6,6 @@ class AppColors {
   static const Color text = Color(0xFFFFFFFF);
   static const Color cardBackground = Color(0xFF1A1A1A);
   static const Color secondaryText = Color(0xFFB3B3B3);
+  static const Color scaffoldBackgroundColor = Color.fromARGB(255, 96, 96, 96);
+  static const Color transparent = Color(0x00000000);
 }

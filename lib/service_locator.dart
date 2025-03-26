@@ -5,7 +5,6 @@ import 'package:posix/data/auth/sources/auth_api_service.dart';
 import 'package:posix/domain/auth/repositories/auth.dart';
 import 'package:posix/domain/auth/usecases/authenticate.dart';
 import 'package:posix/domain/auth/usecases/isDeviceSupported.dart';
-import 'package:posix/presentation/auth/bloc/biometric_auth_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -19,4 +18,5 @@ void setupServiceLocator() {
 
   //usecases
   sl.registerSingleton<IsDeviceSupportedUseCase>(IsDeviceSupportedUseCase());
+  sl.registerSingleton<AuthenticateUseCase>(AuthenticateUseCase());
 }
