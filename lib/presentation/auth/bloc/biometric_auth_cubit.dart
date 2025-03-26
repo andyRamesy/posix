@@ -20,6 +20,7 @@ class BiometricAuthCubit extends Cubit<BiometricAuthState> {
   void authenticate() async {
     bool response = await sl<AuthenticateUseCase>().call(false);
     if (response) {
+      print("response bloc: $response");
       emit(BiometricSuccess());
     } else {
       emit(BiometricFailure("Authentication failed"));

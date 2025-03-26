@@ -37,11 +37,11 @@ class AuthPage extends StatelessWidget {
   authenticate(BuildContext context) async {
     var res = await sl<AuthenticateUseCase>().call(true);
     final stateAuth = context.read<BiometricAuthCubit>().state;
-    if (stateAuth is BiometricSuccess) {
-      print("success : $stateAuth");
-      // AppNavigation.pushReplacement(context, HomePage());
+
+    if (res) {
+      AppNavigation.pushReplacement(context, HomePage());
     } else {
-      print("auth failed : $stateAuth");
+      print("auth else : $stateAuth");
     }
   }
 
