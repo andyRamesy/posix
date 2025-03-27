@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:local_auth/local_auth.dart';
+import 'package:posix/data/auth/models/signup_request_params.dart';
+import 'package:posix/data/models/signin_requrest_params.dart';
 
 abstract class AuthRepository{
-  Future<bool> canCheckBiometrics();
-  Future<List<BiometricType>> getAvailableBiometrics();
-  Future<bool> authenticate();
-  Future<bool> isDeviceSupported();
+  Future<Either> signup(SignupRequestParams params);
+  Future<Either> signin(SigninRequrestParams params);
 }

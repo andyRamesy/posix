@@ -1,55 +1,33 @@
-import 'package:flutter/services.dart';
-import 'package:local_auth/local_auth.dart';
+import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
+import 'package:posix/core/configs/network/dio_client.dart';
+import 'package:posix/data/auth/models/signin_request_params.dart';
+import 'package:posix/data/auth/models/signup_request_params.dart';
+import 'package:posix/service_locator.dart';
 
-abstract class AuthService {
-  Future<bool> authenticate();
-  Future<bool> canCheckBiometrics();
-  Future<List<BiometricType>> getAvailableBiometrics();
-  Future<bool> isDeviceSupported();
+abstract class AuthApiService {
+  Future<Either> signup(SignupRequestParams params);
+  Future<Either> signin(SigninRequestParams params);
 }
 
-class AuthApiServiceImpl extends AuthService {
-  final LocalAuthentication auth = LocalAuthentication();
-
-
+class AuthApiServiceImpl extends AuthApiService {
   @override
-  Future<bool> authenticate() async {
+  Future<Either> signin(SigninRequestParams params) async {
     try {
-      var res = await auth.authenticate(
-          localizedReason: "The OS choose auth method",
-          options: AuthenticationOptions(
-            useErrorDialogs: true
-          )
-        );
-        return res;
-    } on PlatformException catch (e) {
-      print("error on authenticate : $e");
-      throw Exception(e);
+      var response = await sl<DioClient>().post(''); //todo: data params to send
+      return Right(response);
+    } catch (e) {
+      return Left(e);
     }
   }
 
   @override
-  Future<bool> canCheckBiometrics() async {
+  Future<Either> signup(SignupRequestParams params) async {
     try {
-      return await auth.canCheckBiometrics;
-    } on PlatformException catch (e) {
-      print("error on canCheckBiometrics : $e");
-      return false;
+      var response = await sl<DioClient>().post('url');
+      return Right(response);
+    } on DioException catch (e) {
+      return Left(e);
     }
-  }
-
-  @override
-  Future<List<BiometricType>> getAvailableBiometrics() async {
-    try {
-      return await auth.getAvailableBiometrics();
-    } on PlatformException catch (error) {
-      print("on getAvailableBiometrics : $error");
-      return [];
-    }
-  }
-  
-  @override
-  Future<bool> isDeviceSupported() async{
-    return await auth.isDeviceSupported();
   }
 }
