@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:posix/presentation/auth/pages/auth.dart';
+import 'package:posix/presentation/auth/pages/authBiometric.dart';
 
 class SplashController {
   final BuildContext context;
@@ -7,12 +7,12 @@ class SplashController {
 
   void startTimer() {
     Future.delayed(const Duration(seconds: 3), () {
-      if(context.mounted){
-         Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AuthPage(),
-        ));
+      if (context.mounted) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AuthBiometricPage(),
+            ));
       }
     });
   }
