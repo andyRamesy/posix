@@ -32,7 +32,7 @@ class AuthPage extends StatelessWidget {
     );
   }
 
-    authenticate(BuildContext context) async {
+  authenticate(BuildContext context) async {
     var res = await sl<AuthenticateUseCase>().call(true);
     if (res) {
       print("auth success $res");
@@ -43,24 +43,21 @@ class AuthPage extends StatelessWidget {
 
   Widget authBtn(BuildContext context) {
     return AuthCard(
-      child: ElevatedButton(
-        onPressed: () {
-          authenticate(context);
-        },
-        child: const Text("Authenticate"),
-      ),
+      onTap: authenticate(context),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:  BlocBuilder<BiometricAuthCubit, BiometricAuthState>(
+      body: BlocBuilder<BiometricAuthCubit, BiometricAuthState>(
         builder: (context, state) {
           if (state is BiometricNotAvailable) {
             return Center(child: showBiometricUnavailability(context));
-          }else if (state is BiometricAvailable){
-            return Center(child: Text("ici"),);
+          } else if (state is BiometricAvailable) {
+            return Center(
+              child: Text("ici"),
+            );
           }
           return Container();
         },

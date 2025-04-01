@@ -1,8 +1,11 @@
 import 'package:get_it/get_it.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:posix/core/configs/network/dio_client.dart';
+import 'package:posix/data/auth/repositories/auth.dart';
 import 'package:posix/data/auth/repositories/authBiometric.dart';
 import 'package:posix/data/auth/sources/authBiometric_api_service.dart';
+import 'package:posix/data/auth/sources/auth_api_service.dart';
+import 'package:posix/domain/auth/repositories/auth.dart';
 import 'package:posix/domain/auth/repositories/authBiometric.dart';
 import 'package:posix/domain/auth/usecases/authBiometric.dart';
 import 'package:posix/domain/auth/usecases/isDeviceSupported.dart';
@@ -16,11 +19,12 @@ void setupServiceLocator() {
   sl.registerSingleton(() => LocalAuthentication());
   //services
   sl.registerSingleton<AuthBiometricService>(AuthBiometricApiServiceImpl());
-
+  sl.registerSingleton<AuthApiService>(AuthApiServiceImpl());
 
   //respositories
   sl.registerSingleton<AuthBiometricRepository>(AuthBiometricRepositoryImpl());
-
+  sl.registerSingleton<AuthRepository>(AuthRepositoryImpl());
+  
   //usecases
   sl.registerSingleton<IsDeviceSupportedUseCase>(IsDeviceSupportedUseCase());
   sl.registerSingleton<SigninUseCase>(SigninUseCase());
