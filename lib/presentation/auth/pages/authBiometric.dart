@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:posix/core/configs/theme/app_color.dart';
-import 'package:posix/domain/auth/usecases/authenticate.dart';
+import 'package:posix/domain/auth/usecases/authBiometric.dart';
 import 'package:posix/presentation/auth/bloc/biometric_auth_cubit.dart';
 import 'package:posix/presentation/auth/widgets/auth_card.dart';
 import 'package:posix/service_locator.dart';
