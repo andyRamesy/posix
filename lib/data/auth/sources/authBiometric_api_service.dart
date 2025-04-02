@@ -18,8 +18,7 @@ class AuthBiometricApiServiceImpl extends AuthBiometricService {
           localizedReason: "The OS choose auth method",
           options: AuthenticationOptions(
             useErrorDialogs: true,
-            biometricOnly: false,
-            
+            biometricOnly: true,
           ));
 
       print("source : $res");
