@@ -39,8 +39,10 @@ class _SigninPageState extends State<SigninPage> {
     return Scaffold(
       body: SafeArea(
         child: Column(
+          
           children: [
             _signinText(),
+            _emailField()
           ],
         ),
       ),

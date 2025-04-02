@@ -11,17 +11,19 @@ abstract class AuthBiometricService {
 class AuthBiometricApiServiceImpl extends AuthBiometricService {
   final LocalAuthentication auth = LocalAuthentication();
 
-
   @override
   Future<bool> authenticate() async {
     try {
       var res = await auth.authenticate(
           localizedReason: "The OS choose auth method",
           options: AuthenticationOptions(
-            useErrorDialogs: true
-          )
-        );
-        return res;
+            useErrorDialogs: true,
+            biometricOnly: false,
+            
+          ));
+
+      print("source : $res");
+      return res;
     } on PlatformException catch (e) {
       print("error on authenticate : $e");
       throw Exception(e);
@@ -47,9 +49,9 @@ class AuthBiometricApiServiceImpl extends AuthBiometricService {
       return [];
     }
   }
-  
+
   @override
-  Future<bool> isDeviceSupported() async{
+  Future<bool> isDeviceSupported() async {
     return await auth.isDeviceSupported();
   }
 }
