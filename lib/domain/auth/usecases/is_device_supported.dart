@@ -1,5 +1,5 @@
 import 'package:posix/core/usecase/usecase.dart';
-import 'package:posix/domain/auth/repositories/authBiometric.dart';
+import 'package:posix/domain/auth/repositories/auth_biometric.dart';
 import 'package:posix/service_locator.dart';
 
 class IsDeviceSupportedUseCase extends UseCase<bool,dynamic> {

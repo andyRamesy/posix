@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:posix/domain/auth/usecases/authBiometric.dart';
-import 'package:posix/domain/auth/usecases/isDeviceSupported.dart';
+import 'package:posix/domain/auth/usecases/auth_biometric.dart';
+import 'package:posix/domain/auth/usecases/is_device_supported.dart';
 import 'package:posix/service_locator.dart';
 part 'biometric_auth_state.dart';
 

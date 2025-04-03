@@ -1,7 +1,10 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:posix/common/navigation/app_navigation.dart';
 import 'package:posix/common/widgets/buttons/custom_button.dart';
 import 'package:posix/core/configs/theme/app_color.dart';
 import 'package:posix/core/configs/theme/app_theme.dart';
+import 'package:posix/presentation/auth/pages/signup.dart';
 
 class SigninPage extends StatefulWidget {
   const SigninPage({super.key});
@@ -13,6 +16,14 @@ class SigninPage extends StatefulWidget {
 class _SigninPageState extends State<SigninPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isObscure = true;
+  final _passwordFieldKey = GlobalKey<FormFieldState<String>>();
+
+  void _toggleObscured() {
+    setState(() {
+      _isObscure = !_isObscure;
+    });
+  }
 
   Widget _signinText() {
     return Text(
@@ -30,8 +41,16 @@ class _SigninPageState extends State<SigninPage> {
 
   Widget _passwordField() {
     return TextField(
+      key: _passwordFieldKey,
       controller: _passwordController,
-      decoration: const InputDecoration(hintText: "Password"),
+      obscureText: _isObscure,
+      decoration: InputDecoration(
+          hintText: "Password",
+          suffixIcon: IconButton(
+              onPressed: _toggleObscured,
+              icon: Icon(_isObscure
+                  ? Icons.visibility_rounded
+                  : Icons.visibility_off_sharp))),
     );
   }
 
@@ -52,6 +71,10 @@ class _SigninPageState extends State<SigninPage> {
           TextSpan(
             text: "Register",
             style: AppTheme.appTheme.textTheme.labelLarge,
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                AppNavigation.push(context, SignupPage());
+              },
           )
         ],
       ),
