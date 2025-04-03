@@ -33,7 +33,10 @@ class AppTheme {
         fontSize: 14,
         fontWeight: FontWeight.bold,
         color: AppColors.primary,
-      ) 
+      ),
+      titleLarge: _baseTextStyle.copyWith(
+        fontSize: 12
+      )
     ),
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.background,

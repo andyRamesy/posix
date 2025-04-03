@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:posix/presentation/auth/pages/authBiometric.dart';
+import 'package:posix/presentation/auth/pages/auth_biometric.dart';
 
 class SplashController {
   final BuildContext context;

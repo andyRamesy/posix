@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:posix/common/widgets/buttons/customButton.dart';
+import 'package:posix/common/widgets/buttons/custom_button.dart';
 import 'package:posix/core/configs/theme/app_color.dart';
 import 'package:posix/core/configs/theme/app_theme.dart';
 
@@ -15,8 +15,10 @@ class _SigninPageState extends State<SigninPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   Widget _signinText() {
-    return const Text("Sign in",
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24));
+    return Text(
+      "Sign in",
+      style: AppTheme.appTheme.textTheme.headlineLarge,
+    );
   }
 
   Widget _emailField() {
@@ -42,6 +44,20 @@ class _SigninPageState extends State<SigninPage> {
         });
   }
 
+  Widget _signupText(BuildContext context) {
+    return Text.rich(
+      TextSpan(
+        children: [
+          const TextSpan(text: "Don't have account ? "),
+          TextSpan(
+            text: "Register",
+            style: AppTheme.appTheme.textTheme.labelLarge,
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +75,11 @@ class _SigninPageState extends State<SigninPage> {
             ),
             _emailField(),
             _passwordField(),
-            _signinButton(context)
+            _signinButton(context),
+            const SizedBox(
+              height: 5,
+            ),
+            _signupText(context)
           ],
         ),
       ),

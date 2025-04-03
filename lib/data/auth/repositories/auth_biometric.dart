@@ -1,6 +1,6 @@
 import 'package:local_auth/local_auth.dart';
 import 'package:posix/data/auth/sources/authBiometric_api_service.dart';
-import 'package:posix/domain/auth/repositories/authBiometric.dart';
+import 'package:posix/domain/auth/repositories/auth_biometric.dart';
 import 'package:posix/service_locator.dart';
 
 class AuthBiometricRepositoryImpl extends AuthBiometricRepository {

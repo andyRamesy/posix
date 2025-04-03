@@ -1,4 +1,3 @@
-import 'package:dartz/dartz.dart';
 import 'package:local_auth/local_auth.dart';
 
 abstract class AuthBiometricRepository{
