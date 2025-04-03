@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:posix/core/configs/theme/app_color.dart';
 
 class AppTheme {
+  static const TextStyle _baseTextStyle = TextStyle(
+    fontFamily: "ProximaNova",
+  );
   static final appTheme = ThemeData(
     brightness: Brightness.dark,
     primaryColor: AppColors.primary,
@@ -14,21 +17,23 @@ class AppTheme {
       onBackground: AppColors.text,
       onSurface: AppColors.text,
     ),
-    textTheme: const TextTheme(
-      headlineLarge: TextStyle(
-        fontSize: 24,
+    textTheme: TextTheme(
+      headlineLarge: _baseTextStyle.copyWith(
         fontWeight: FontWeight.bold,
+        fontSize: 24,
         color: AppColors.text,
       ),
-      bodyLarge: TextStyle(
-        fontFamily: "Helvetica",
+      bodyLarge: _baseTextStyle.copyWith(
         fontWeight: FontWeight.w900,
         letterSpacing: 1.5,
         fontSize: 16,
         color: AppColors.text,
       ),
-      labelLarge: TextStyle(
-          fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.primary),
+      labelLarge: _baseTextStyle.copyWith(
+        fontSize: 14,
+        fontWeight: FontWeight.bold,
+        color: AppColors.primary,
+      ) 
     ),
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.background,
