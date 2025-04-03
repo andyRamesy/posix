@@ -16,8 +16,17 @@ class AppTheme {
     ),
     textTheme: const TextTheme(
       headlineLarge: TextStyle(
-          fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.text),
-      bodyLarge: TextStyle(fontSize: 16, color: AppColors.text),
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: AppColors.text,
+      ),
+      bodyLarge: TextStyle(
+        fontFamily: "Helvetica",
+        fontWeight: FontWeight.w900,
+        letterSpacing: 1.5,
+        fontSize: 16,
+        color: AppColors.text,
+      ),
       labelLarge: TextStyle(
           fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.primary),
     ),
