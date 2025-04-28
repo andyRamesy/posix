@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:posix/core/configs/constants/api_url.dart';
 import 'package:posix/core/configs/network/dio_client.dart';
 import 'package:posix/data/auth/models/signin_request_params.dart';
 import 'package:posix/data/auth/models/signup_request_params.dart';
@@ -24,10 +25,13 @@ class AuthApiServiceImpl extends AuthApiService {
   @override
   Future<Either> signup(SignupRequestParams params) async {
     try {
-      var response = await sl<DioClient>().post('url');
-      return Right(response);
+      var response = await sl<DioClient>().post(
+        ApiUrl.signup,
+        data: params.toMap(),
+      );
+      return Right(response.data);
     } on DioException catch (e) {
-      return Left(e);
+      return Left(e.response!.data['message']);
     }
   }
 }

@@ -2,24 +2,40 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:posix/common/navigation/app_navigation.dart';
 import 'package:posix/common/widgets/buttons/custom_button.dart';
+import 'package:posix/core/configs/theme/app_color.dart';
 import 'package:posix/core/configs/theme/app_theme.dart';
-import 'package:posix/presentation/home/pages/home.dart';
+import 'package:posix/data/auth/models/signup_request_params.dart';
+import 'package:posix/domain/auth/usecases/signup.dart';
+import 'package:posix/presentation/auth/pages/signin.dart';
+import 'package:posix/service_locator.dart';
+
+enum PasswordFieldType { password, confirmPassword }
 
 class SignupPage extends StatefulWidget {
-  SignupPage({super.key});
+  const SignupPage({super.key});
 
   @override
   State<SignupPage> createState() => _SignupPageState();
 }
 
 class _SignupPageState extends State<SignupPage> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _pseudoController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _isObscure = true;
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+  bool _isObscurePassword = true;
+  bool _isObscurePasswordConfirmation = true;
 
-  void _toggleObscured() {
+  _toggleObscuredPassword(PasswordFieldType fieldType) {
     setState(() {
-      _isObscure = !_isObscure;
+      switch (fieldType) {
+        case PasswordFieldType.password:
+          _isObscurePassword = !_isObscurePassword;
+          break;
+        case PasswordFieldType.confirmPassword:
+          _isObscurePasswordConfirmation = !_isObscurePasswordConfirmation;
+          break;
+      }
     });
   }
 
@@ -30,34 +46,38 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
-  Widget _emailField() {
+  Widget _pseudoField() {
     return TextField(
-      controller: _emailController,
-      decoration: const InputDecoration(hintText: "Email"),
+      controller: _pseudoController,
+      decoration: const InputDecoration(hintText: "Pseudo"),
     );
   }
 
   Widget _passwordField() {
     return TextField(
       controller: _passwordController,
+      obscureText: _isObscurePassword,
       decoration: InputDecoration(
           hintText: "Password",
           suffixIcon: IconButton(
-              onPressed: _toggleObscured,
-              icon: Icon(_isObscure
-                  ? Icons.visibility_rounded
-                  : Icons.visibility_off_sharp))),
+              onPressed: () =>
+                  _toggleObscuredPassword(PasswordFieldType.password),
+              icon: Icon(_isObscurePassword
+                  ? Icons.visibility_off_sharp
+                  : Icons.visibility_rounded))),
     );
   }
 
   Widget _confirmPasswordField() {
     return TextField(
-      controller: _passwordController,
+      controller: _confirmPasswordController,
+      obscureText: _isObscurePasswordConfirmation,
       decoration: InputDecoration(
           hintText: "Confirm password",
           suffixIcon: IconButton(
-              onPressed: _toggleObscured,
-              icon: Icon(_isObscure
+              onPressed: () =>
+                  _toggleObscuredPassword(PasswordFieldType.confirmPassword),
+              icon: Icon(_isObscurePasswordConfirmation
                   ? Icons.visibility_rounded
                   : Icons.visibility_off_sharp))),
     );
@@ -66,8 +86,11 @@ class _SignupPageState extends State<SignupPage> {
   Widget _signupButton(BuildContext context) {
     return Custombutton(
       text: "Register",
-      onPressed: () {
-        print("signup");
+      onPressed: () async {
+        await sl<SignupUseCase>().call(SignupRequestParams(
+          email: _pseudoController.text,
+          password: _passwordController.text,
+        ));
       },
       textStyle: AppTheme.appTheme.textTheme.bodyLarge!,
     );
@@ -83,7 +106,7 @@ class _SignupPageState extends State<SignupPage> {
             style: AppTheme.appTheme.textTheme.labelLarge,
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                AppNavigation.push(context, HomePage());
+                AppNavigation.push(context, SigninPage());
               },
           )
         ],
@@ -94,6 +117,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.scaffoldBackgroundColor,
       body: SafeArea(
         minimum: const EdgeInsets.only(top: 100, right: 16, left: 16),
         child: Column(
@@ -105,7 +129,7 @@ class _SignupPageState extends State<SignupPage> {
             const SizedBox(
               height: 30,
             ),
-            _emailField(),
+            _pseudoField(),
             _passwordField(),
             _confirmPasswordField(),
             const SizedBox(

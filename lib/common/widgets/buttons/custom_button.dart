@@ -7,20 +7,20 @@ class Custombutton extends StatelessWidget {
   final bool isPrimary;
   final TextStyle textStyle;
 
-  const Custombutton(
-      {super.key,
-      required this.text,
-      required this.onPressed,
-      this.isPrimary = true,
-      required this.textStyle});
+  const Custombutton({
+    super.key,
+    required this.text,
+    required this.onPressed,
+    this.isPrimary = true,
+    required this.textStyle,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
           backgroundColor: isPrimary ? AppColors.primary : AppColors.background,
-          foregroundColor:
-              isPrimary ? AppColors.customBlack : AppColors.text,
+          foregroundColor: isPrimary ? AppColors.customBlack : AppColors.text,
           padding: const EdgeInsets.symmetric(
             vertical: 14,
             horizontal: 14,
