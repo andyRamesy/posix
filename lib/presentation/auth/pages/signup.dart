@@ -83,12 +83,22 @@ class _SignupPageState extends State<SignupPage> {
     return Custombutton(
       text: "Register",
       onPressed: () async {
-        if (_passwordController.text.isEmpty) {
+        var password = _passwordController.text;
+        var confirmPassword = _confirmPasswordController.text;
+
+        if (password.isEmpty || confirmPassword.isEmpty) {
           setState(() {
             _showErrorPassword = true;
+            _showErrorPasswordConfirmation = true;
           });
           return;
         }
+        if(confirmPassword != password){
+          setState(() {
+            //stopped here 
+          });
+        }
+
         await sl<SignupUseCase>().call(SignupRequestParams(
           email: _pseudoController.text,
           password: _passwordController.text,
