@@ -1,0 +1,6 @@
+- Call login API
+- Save token securely
+- Save user info if returned
+- Set auth state to true
+- Redirect to home page
+- All future API calls attach token
