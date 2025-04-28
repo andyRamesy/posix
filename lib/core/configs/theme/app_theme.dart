@@ -14,6 +14,7 @@ class AppTheme {
       background: AppColors.background,
       surface: AppColors.cardBackground,
       onPrimary: Colors.black, // Ensures readability on primary buttons
+      onError: AppColors.errorText,
       onBackground: AppColors.text,
       onSurface: AppColors.text,
     ),
@@ -36,7 +37,7 @@ class AppTheme {
       ),
       titleLarge: _baseTextStyle.copyWith(
         fontSize: 12
-      )
+      ),
     ),
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.background,

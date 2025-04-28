@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:posix/presentation/auth/pages/auth_biometric.dart';
+import 'package:posix/presentation/auth/pages/signup.dart';
 
 class SplashController {
   final BuildContext context;
@@ -11,7 +12,7 @@ class SplashController {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => AuthBiometricPage(),
+              builder: (context) => SignupPage(),
             ));
       }
     });

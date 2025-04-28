@@ -7,6 +7,7 @@ import 'package:posix/core/configs/theme/app_theme.dart';
 import 'package:posix/data/auth/models/signup_request_params.dart';
 import 'package:posix/domain/auth/usecases/signup.dart';
 import 'package:posix/presentation/auth/pages/signin.dart';
+import 'package:posix/presentation/auth/widgets/custom_password_textfield.dart';
 import 'package:posix/service_locator.dart';
 
 enum PasswordFieldType { password, confirmPassword }
@@ -25,6 +26,8 @@ class _SignupPageState extends State<SignupPage> {
       TextEditingController();
   bool _isObscurePassword = true;
   bool _isObscurePasswordConfirmation = true;
+  bool _showErrorPassword = false;
+  bool _showErrorPasswordConfirmation = false;
 
   _toggleObscuredPassword(PasswordFieldType fieldType) {
     setState(() {
@@ -54,32 +57,25 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   Widget _passwordField() {
-    return TextField(
-      controller: _passwordController,
-      obscureText: _isObscurePassword,
-      decoration: InputDecoration(
-          hintText: "Password",
-          suffixIcon: IconButton(
-              onPressed: () =>
-                  _toggleObscuredPassword(PasswordFieldType.password),
-              icon: Icon(_isObscurePassword
-                  ? Icons.visibility_off_sharp
-                  : Icons.visibility_rounded))),
+    return CustomPasswordTextfield(
+      textController: _passwordController,
+      isObscureText: _isObscurePassword,
+      errorText: 'Must not be empty',
+      isOnError: _showErrorPassword,
+      toggleIconButton: () =>
+          _toggleObscuredPassword(PasswordFieldType.password),
     );
   }
 
   Widget _confirmPasswordField() {
-    return TextField(
-      controller: _confirmPasswordController,
-      obscureText: _isObscurePasswordConfirmation,
-      decoration: InputDecoration(
-          hintText: "Confirm password",
-          suffixIcon: IconButton(
-              onPressed: () =>
-                  _toggleObscuredPassword(PasswordFieldType.confirmPassword),
-              icon: Icon(_isObscurePasswordConfirmation
-                  ? Icons.visibility_rounded
-                  : Icons.visibility_off_sharp))),
+    return CustomPasswordTextfield(
+      textController: _confirmPasswordController,
+      isObscureText: _isObscurePasswordConfirmation,
+      errorText: 'Must not be empty too',
+      isOnError: _showErrorPasswordConfirmation,
+      toggleIconButton: () =>
+          _toggleObscuredPassword(PasswordFieldType.confirmPassword),
+      hintText: 'Confirm password',
     );
   }
 
@@ -87,6 +83,12 @@ class _SignupPageState extends State<SignupPage> {
     return Custombutton(
       text: "Register",
       onPressed: () async {
+        if (_passwordController.text.isEmpty) {
+          setState(() {
+            _showErrorPassword = true;
+          });
+          return;
+        }
         await sl<SignupUseCase>().call(SignupRequestParams(
           email: _pseudoController.text,
           password: _passwordController.text,
