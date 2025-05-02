@@ -26,8 +26,20 @@ class _SignupPageState extends State<SignupPage> {
       TextEditingController();
   bool _isObscurePassword = true;
   bool _isObscurePasswordConfirmation = true;
-  bool _showErrorPassword = false;
-  bool _showErrorPasswordConfirmation = false;
+
+  String _emptyUsername = '';
+  bool _onEmptyUsername = false;
+
+  String _emptyErrorMsg = '';
+  bool _onEmpty = false;
+
+  String _emptyConfirmPasswordErrorMsg = '';
+  bool _onEmptyConfirmPassword = false;
+
+  String _notMatchErrorMsg = '';
+  bool _onNotMatchingConfirmPassword = false;
+
+  bool _formHasError = false;
 
   _toggleObscuredPassword(PasswordFieldType fieldType) {
     setState(() {
@@ -57,50 +69,84 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   Widget _passwordField() {
-    return CustomPasswordTextfield(
+    return CustomTextField(
       textController: _passwordController,
       isObscureText: _isObscurePassword,
-      errorText: 'Must not be empty',
-      isOnError: _showErrorPassword,
+      errorText: _emptyErrorMsg,
+      isOnError: _onEmpty,
+      fieldType: FieldType.password,
       toggleIconButton: () =>
           _toggleObscuredPassword(PasswordFieldType.password),
     );
   }
 
   Widget _confirmPasswordField() {
-    return CustomPasswordTextfield(
+    return CustomTextField(
       textController: _confirmPasswordController,
       isObscureText: _isObscurePasswordConfirmation,
-      errorText: 'Must not be empty too',
-      isOnError: _showErrorPasswordConfirmation,
+      errorText: _onNotMatchingConfirmPassword
+          ? _notMatchErrorMsg
+          : _emptyConfirmPasswordErrorMsg,
+      isOnError: _onEmptyConfirmPassword || _onNotMatchingConfirmPassword,
       toggleIconButton: () =>
           _toggleObscuredPassword(PasswordFieldType.confirmPassword),
       hintText: 'Confirm password',
+      fieldType: FieldType.password,
     );
+  }
+
+  bool _isNotvalidPassField() {
+    String password = _passwordController.text;
+    String confirmPassword = _confirmPasswordController.text;
+    String username = _pseudoController.text;
+
+    setState(() {
+      _onEmptyUsername = false;
+      _onEmpty = false;
+      _onEmptyConfirmPassword = false;
+      _onNotMatchingConfirmPassword = false;
+      _formHasError = false;
+
+      _emptyUsername = '';
+      _emptyErrorMsg = '';
+      _emptyConfirmPasswordErrorMsg = '';
+      _notMatchErrorMsg = '';
+
+      if (username.isEmpty) {
+        _emptyUsername = 'Username must not be empty';
+        _onEmptyUsername = true;
+        _formHasError = true;
+      }
+
+      if (password.isEmpty) {
+        _emptyErrorMsg = 'password must not be empty';
+        _onEmpty = true;
+        _formHasError = true;
+      }
+
+      if (confirmPassword.isEmpty) {
+        _emptyConfirmPasswordErrorMsg = 'confirm password must not be empty';
+        _onEmptyConfirmPassword = true;
+        _onNotMatchingConfirmPassword = true;
+        _formHasError = true;
+      }
+
+      if (password != confirmPassword) {
+        _notMatchErrorMsg = 'Confirm password do not match';
+        _onNotMatchingConfirmPassword = true;
+        _formHasError = true;
+      }
+    });
+    return _formHasError;
   }
 
   Widget _signupButton(BuildContext context) {
     return Custombutton(
       text: "Register",
       onPressed: () async {
-        var password = _passwordController.text;
-        var confirmPassword = _confirmPasswordController.text;
-
-        if (password.isEmpty || confirmPassword.isEmpty) {
-          setState(() {
-            _showErrorPassword = true;
-            _showErrorPasswordConfirmation = true;
-          });
-          return;
-        }
-        if(confirmPassword != password){
-          setState(() {
-            //stopped here 
-          });
-        }
-
+        if (_isNotvalidPassField()) return;
         await sl<SignupUseCase>().call(SignupRequestParams(
-          email: _pseudoController.text,
+          username: _pseudoController.text,
           password: _passwordController.text,
         ));
       },

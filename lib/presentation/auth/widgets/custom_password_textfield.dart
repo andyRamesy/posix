@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:posix/core/configs/theme/app_theme.dart';
 
-class CustomPasswordTextfield extends StatelessWidget {
+enum FieldType { password, text }
+
+class CustomTextField extends StatelessWidget {
   final TextEditingController textController;
   final bool isObscureText;
-  final Function toggleIconButton;
+  final VoidCallback toggleIconButton;
   final bool isOnError;
   final String errorText;
   final String hintText;
+  final FieldType fieldType;
 
-  const CustomPasswordTextfield({
+  const CustomTextField({
     super.key,
     required this.textController,
     required this.isObscureText,
     required this.toggleIconButton,
     required this.isOnError,
-    required this.errorText,  this.hintText = 'Password',
+    required this.errorText,
+    required this.fieldType,
+    this.hintText = '',
   });
 
   @override
@@ -30,23 +35,23 @@ class CustomPasswordTextfield extends StatelessWidget {
           obscureText: isObscureText,
           decoration: InputDecoration(
               hintText: hintText,
-              suffixIcon: IconButton(
-                  onPressed: () => toggleIconButton,
-                  icon: Icon(isObscureText
-                      ? Icons.visibility_off_sharp
-                      : Icons.visibility_rounded))),
+              suffixIcon: fieldType == FieldType.password
+                  ? IconButton(
+                      onPressed: toggleIconButton,
+                      icon: Icon(isObscureText
+                          ? Icons.visibility_rounded
+                          : Icons.visibility_off_sharp))
+                  : null),
         ),
-        Visibility(
-          visible: isOnError,
-          child: Text(
-            'Must not be empty',
-            style: AppTheme.appTheme.textTheme.titleMedium!.copyWith(
-              color: const Color.fromARGB(255, 255, 70, 70),
-            ),
-          ),
-        )
+        isOnError
+            ? Text(
+                errorText,
+                style: AppTheme.appTheme.textTheme.titleMedium!.copyWith(
+                  color: const Color.fromARGB(255, 255, 70, 70),
+                ),
+              )
+            : Container()
       ],
     );
-    ;
   }
 }

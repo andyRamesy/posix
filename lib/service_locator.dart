@@ -9,6 +9,7 @@ import 'package:posix/domain/auth/repositories/auth.dart';
 import 'package:posix/domain/auth/repositories/auth_biometric.dart';
 import 'package:posix/domain/auth/usecases/auth_biometric.dart';
 import 'package:posix/domain/auth/usecases/is_device_supported.dart';
+import 'package:posix/domain/auth/usecases/is_logged_in.dart';
 import 'package:posix/domain/auth/usecases/signin.dart';
 import 'package:posix/domain/auth/usecases/signup.dart';
 
@@ -17,6 +18,7 @@ final sl = GetIt.instance;
 void setupServiceLocator() {
   sl.registerSingleton<DioClient>(DioClient());
   sl.registerSingleton(() => LocalAuthentication());
+  
   //services
   sl.registerSingleton<AuthBiometricService>(AuthBiometricApiServiceImpl());
   sl.registerSingleton<AuthApiService>(AuthApiServiceImpl());
@@ -27,7 +29,9 @@ void setupServiceLocator() {
 
   //usecases
   sl.registerSingleton<IsDeviceSupportedUseCase>(IsDeviceSupportedUseCase());
+
   sl.registerSingleton<AuthenticateUseCase>(AuthenticateUseCase());
   sl.registerSingleton<SignupUseCase>(SignupUseCase());
   sl.registerSingleton<SigninUseCase>(SigninUseCase());
+  sl.registerSingleton<IsLoggedInUseCase>(IsLoggedInUseCase());
 }
