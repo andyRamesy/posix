@@ -8,6 +8,7 @@ import 'package:posix/data/auth/models/signup_request_params.dart';
 import 'package:posix/domain/auth/usecases/signup.dart';
 import 'package:posix/presentation/auth/pages/signin.dart';
 import 'package:posix/presentation/auth/widgets/custom_password_textfield.dart';
+import 'package:posix/presentation/home/pages/home.dart';
 import 'package:posix/service_locator.dart';
 
 enum PasswordFieldType { password, confirmPassword }
@@ -70,6 +71,7 @@ class _SignupPageState extends State<SignupPage> {
 
   Widget _passwordField() {
     return CustomTextField(
+      hintText: 'Password',
       textController: _passwordController,
       isObscureText: _isObscurePassword,
       errorText: _emptyErrorMsg,
@@ -145,10 +147,15 @@ class _SignupPageState extends State<SignupPage> {
       text: "Register",
       onPressed: () async {
         if (_isNotvalidPassField()) return;
+
+
         await sl<SignupUseCase>().call(SignupRequestParams(
           username: _pseudoController.text,
           password: _passwordController.text,
         ));
+
+        // context.read<SignupCubit>().signup(SignupRequestParams(username: username, password: password))
+        // AppNavigation.pushAndRemove(context, const HomePage());
       },
       textStyle: AppTheme.appTheme.textTheme.bodyLarge!,
     );

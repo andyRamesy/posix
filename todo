@@ -4,3 +4,6 @@
 - Set auth state to true
 - Redirect to home page
 - All future API calls attach token
+
+
+->implement signup cubit
