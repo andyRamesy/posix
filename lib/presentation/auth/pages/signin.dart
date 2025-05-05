@@ -1,10 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:posix/common/navigation/app_navigation.dart';
 import 'package:posix/common/widgets/buttons/custom_button.dart';
 import 'package:posix/core/configs/theme/app_color.dart';
 import 'package:posix/core/configs/theme/app_theme.dart';
+import 'package:posix/presentation/auth/bloc/signup_cubit.dart';
 import 'package:posix/presentation/auth/pages/signup.dart';
+import 'package:posix/service_locator.dart';
 
 class SigninPage extends StatefulWidget {
   const SigninPage({super.key});
@@ -73,7 +76,12 @@ class _SigninPageState extends State<SigninPage> {
             style: AppTheme.appTheme.textTheme.labelLarge,
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                AppNavigation.push(context, SignupPage());
+                AppNavigation.push(
+                    context,
+                    BlocProvider(
+                      create: (context) => sl<SignupCubit>(),
+                      child: SignupPage(),
+                    ));
               },
           )
         ],

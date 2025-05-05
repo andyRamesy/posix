@@ -35,7 +35,6 @@ dependencies:
   flutter_bloc:
   logger:
   reactive_button:
-  reactive_button:
   get_it:
   shared_preferences:
   flutter_svg: 
