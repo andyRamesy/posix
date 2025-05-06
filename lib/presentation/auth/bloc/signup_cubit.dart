@@ -14,7 +14,10 @@ class SignupCubit extends Cubit<SignupState> {
     var data = await sl<SignupUseCase>().call(params);
 
     data.fold(
-      (error) => emit(SignupFailed(error.message[0])),
+      (error) {
+        final String errorMessage = error[0];
+        emit(SignupFailed(errorMessage));
+      },
       (data) => emit(SignupSuccess()),
     );
   }

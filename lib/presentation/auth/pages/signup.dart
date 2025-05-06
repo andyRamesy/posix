@@ -1,15 +1,15 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:posix/common/navigation/app_navigation.dart';
 import 'package:posix/common/widgets/buttons/custom_button.dart';
 import 'package:posix/core/configs/theme/app_color.dart';
 import 'package:posix/core/configs/theme/app_theme.dart';
 import 'package:posix/data/auth/models/signup_request_params.dart';
-import 'package:posix/domain/auth/usecases/signup.dart';
+import 'package:posix/presentation/auth/bloc/signup_cubit.dart';
 import 'package:posix/presentation/auth/pages/signin.dart';
 import 'package:posix/presentation/auth/widgets/custom_password_textfield.dart';
 import 'package:posix/presentation/home/pages/home.dart';
-import 'package:posix/service_locator.dart';
 
 enum PasswordFieldType { password, confirmPassword }
 
@@ -143,21 +143,23 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   Widget _signupButton(BuildContext context) {
-    return Custombutton(
-      text: "Register",
-      onPressed: () async {
-        if (_isNotvalidPassField()) return;
-
-
-        await sl<SignupUseCase>().call(SignupRequestParams(
-          username: _pseudoController.text,
-          password: _passwordController.text,
-        ));
-
-        // context.read<SignupCubit>().signup(SignupRequestParams(username: username, password: password))
-        // AppNavigation.pushAndRemove(context, const HomePage());
+    return BlocBuilder<SignupCubit, SignupState>(
+      builder: (context, state) {
+        final isLoading = state is SignupLoading;
+        return Custombutton(
+          text: "Register",
+          onPressed: () async {
+            if (_isNotvalidPassField()) return;
+            final params = SignupRequestParams(
+              username: _pseudoController.text,
+              password: _passwordController.text,
+            );
+            context.read<SignupCubit>().signup(params);
+          },
+          disabledButton: isLoading,
+          textStyle: AppTheme.appTheme.textTheme.bodyLarge!,
+        );
       },
-      textStyle: AppTheme.appTheme.textTheme.bodyLarge!,
     );
   }
 
@@ -181,28 +183,39 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.scaffoldBackgroundColor,
-      body: SafeArea(
-        minimum: const EdgeInsets.only(top: 100, right: 16, left: 16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          spacing: 10,
-          children: [
-            _signupText(),
-            const SizedBox(
-              height: 30,
-            ),
-            _pseudoField(),
-            _passwordField(),
-            _confirmPasswordField(),
-            const SizedBox(
-              height: 5,
-            ),
-            _signupButton(context),
-            _siginText(context)
-          ],
+    return BlocListener<SignupCubit, SignupState>(
+      listener: (context, state) {
+        if (state is SignupFailed) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.errorMsg)),
+          );
+        } else if (state is SignupSuccess) {
+          AppNavigation.pushAndRemove(context, const HomePage());
+        }
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.scaffoldBackgroundColor,
+        body: SafeArea(
+          minimum: const EdgeInsets.only(top: 100, right: 16, left: 16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            spacing: 10,
+            children: [
+              _signupText(),
+              const SizedBox(
+                height: 30,
+              ),
+              _pseudoField(),
+              _passwordField(),
+              _confirmPasswordField(),
+              const SizedBox(
+                height: 5,
+              ),
+              _signupButton(context),
+              _siginText(context)
+            ],
+          ),
         ),
       ),
     );

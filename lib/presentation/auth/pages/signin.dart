@@ -7,6 +7,7 @@ import 'package:posix/core/configs/theme/app_color.dart';
 import 'package:posix/core/configs/theme/app_theme.dart';
 import 'package:posix/presentation/auth/bloc/signup_cubit.dart';
 import 'package:posix/presentation/auth/pages/signup.dart';
+import 'package:posix/presentation/auth/widgets/custom_password_textfield.dart';
 import 'package:posix/service_locator.dart';
 
 class SigninPage extends StatefulWidget {
@@ -17,10 +18,16 @@ class SigninPage extends StatefulWidget {
 }
 
 class _SigninPageState extends State<SigninPage> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isObscure = true;
   final _passwordFieldKey = GlobalKey<FormFieldState<String>>();
+
+  bool _onEmptyUsername = false;
+  bool _onEmptyPassword = false;
+  String _emptyUsernameErrorMsg = '';
+  String _emptyPasswordErrorMsg = '';
+  bool _formHasError = false;
 
   void _toggleObscured() {
     setState(() {
@@ -35,15 +42,24 @@ class _SigninPageState extends State<SigninPage> {
     );
   }
 
-  Widget _emailField() {
-    return TextField(
-      controller: _emailController,
-      decoration: const InputDecoration(hintText: "Email"),
-    );
+  Widget _usernameField() {
+    return CustomTextField(
+        textController: _usernameController,
+        isOnError: _onEmptyUsername,
+        errorText: _emptyUsernameErrorMsg,
+        hintText: "Pseudo",
+        fieldType: FieldType.text);
   }
 
   Widget _passwordField() {
-    return TextField(
+    return CustomTextField(
+        textController: _passwordController,
+        isOnError: _onEmptyPassword,
+        errorText: _emptyPasswordErrorMsg,
+        fieldType: FieldType.password,
+        isObscureText: _isObscure,
+        toggleIconButton: _toggleObscured,hintText: 'Password',);
+    TextField(
       key: _passwordFieldKey,
       controller: _passwordController,
       obscureText: _isObscure,
@@ -57,12 +73,38 @@ class _SigninPageState extends State<SigninPage> {
     );
   }
 
+  bool _isNotValidForm() {
+    String pseudo = _usernameController.text;
+    String password = _passwordController.text;
+
+    setState(() {
+      _onEmptyUsername = false;
+      _onEmptyPassword = false;
+      _formHasError = false;
+      _emptyUsernameErrorMsg = '';
+      _emptyPasswordErrorMsg = '';
+      if (pseudo.isEmpty) {
+        _onEmptyUsername = true;
+        _emptyUsernameErrorMsg = 'Please enter your pseudo';
+        _formHasError = true;
+      }
+      if (password.isEmpty) {
+        _onEmptyPassword = true;
+        _emptyPasswordErrorMsg = 'Please enter your password';
+        _formHasError = true;
+      }
+    });
+    return _formHasError;
+  }
+
   Widget _signinButton(BuildContext context) {
     return Custombutton(
         textStyle: AppTheme.appTheme.textTheme.bodyLarge!,
         text: "Validate",
         onPressed: () {
           print("button clicked");
+          if (_isNotValidForm()) return;
+          print('valid form');
         });
   }
 
@@ -104,7 +146,7 @@ class _SigninPageState extends State<SigninPage> {
             const SizedBox(
               height: 10,
             ),
-            _emailField(),
+            _usernameField(),
             _passwordField(),
             _signinButton(context),
             const SizedBox(

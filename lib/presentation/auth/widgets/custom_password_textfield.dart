@@ -6,7 +6,7 @@ enum FieldType { password, text }
 class CustomTextField extends StatelessWidget {
   final TextEditingController textController;
   final bool isObscureText;
-  final VoidCallback toggleIconButton;
+  final VoidCallback? toggleIconButton;
   final bool isOnError;
   final String errorText;
   final String hintText;
@@ -15,8 +15,8 @@ class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
     required this.textController,
-    required this.isObscureText,
-    required this.toggleIconButton,
+    this.isObscureText = false,
+    this.toggleIconButton,
     required this.isOnError,
     required this.errorText,
     required this.fieldType,
@@ -34,6 +34,7 @@ class CustomTextField extends StatelessWidget {
           controller: textController,
           obscureText: isObscureText,
           decoration: InputDecoration(
+              
               hintText: hintText,
               suffixIcon: fieldType == FieldType.password
                   ? IconButton(

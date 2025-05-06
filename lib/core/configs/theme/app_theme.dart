@@ -44,15 +44,15 @@ class AppTheme {
       foregroundColor: AppColors.text,
       elevation: 0,
     ),
-    inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      fillColor: AppColors.cardBackground,
-      hintStyle: const TextStyle(color: AppColors.secondaryText),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide.none,
-      ),
-    ),
+    // inputDecorationTheme: InputDecorationTheme(
+    //   filled: true,
+    //   fillColor: AppColors.cardBackground,
+    //   hintStyle: const TextStyle(color: AppColors.secondaryText),
+    //   border: OutlineInputBorder(
+    //     borderRadius: BorderRadius.circular(8),
+    //     // borderSide: BorderSide.none,
+    //   ),
+    // ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
