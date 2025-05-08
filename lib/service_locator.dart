@@ -12,6 +12,7 @@ import 'package:posix/domain/auth/usecases/is_device_supported.dart';
 import 'package:posix/domain/auth/usecases/is_logged_in.dart';
 import 'package:posix/domain/auth/usecases/signin.dart';
 import 'package:posix/domain/auth/usecases/signup.dart';
+import 'package:posix/presentation/auth/bloc/signin_cubit.dart';
 import 'package:posix/presentation/auth/bloc/signup_cubit.dart';
 
 final sl = GetIt.instance;
@@ -30,14 +31,18 @@ void setupServiceLocator() {
 
   //usecases
   sl.registerSingleton<IsDeviceSupportedUseCase>(IsDeviceSupportedUseCase());
-
   sl.registerSingleton<AuthenticateUseCase>(AuthenticateUseCase());
+  
   //Auth usecases
   sl.registerSingleton<SignupUseCase>(SignupUseCase());
   sl.registerSingleton<SigninUseCase>(SigninUseCase());
   sl.registerSingleton<IsLoggedInUseCase>(IsLoggedInUseCase());
 
+
   //cubits
   sl.registerFactory<SignupCubit>(
       () => SignupCubit(signupUseCase: SignupUseCase()));
+  sl.registerFactory<SigninCubit>(
+      () => SigninCubit(signinUseCase: SigninUseCase()));
+  
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:posix/core/configs/theme/app_color.dart';
 import 'package:posix/core/configs/theme/app_theme.dart';
 
 enum FieldType { password, text }
@@ -11,6 +12,7 @@ class CustomTextField extends StatelessWidget {
   final String errorText;
   final String hintText;
   final FieldType fieldType;
+  final bool hasError;
 
   const CustomTextField({
     super.key,
@@ -21,6 +23,7 @@ class CustomTextField extends StatelessWidget {
     required this.errorText,
     required this.fieldType,
     this.hintText = '',
+    this.hasError = false,
   });
 
   @override
@@ -30,19 +33,25 @@ class CustomTextField extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       spacing: 5,
       children: [
-        TextField(
-          controller: textController,
-          obscureText: isObscureText,
-          decoration: InputDecoration(
-              
-              hintText: hintText,
-              suffixIcon: fieldType == FieldType.password
-                  ? IconButton(
-                      onPressed: toggleIconButton,
-                      icon: Icon(isObscureText
-                          ? Icons.visibility_rounded
-                          : Icons.visibility_off_sharp))
-                  : null),
+        Container(
+          decoration: hasError
+              ? BoxDecoration(
+                  border:
+                      Border(bottom: BorderSide(color: AppColors.errorText)))
+              : null,
+          child: TextField(
+            controller: textController,
+            obscureText: isObscureText,
+            decoration: InputDecoration(
+                hintText: hintText,
+                suffixIcon: fieldType == FieldType.password
+                    ? IconButton(
+                        onPressed: toggleIconButton,
+                        icon: Icon(isObscureText
+                            ? Icons.visibility_rounded
+                            : Icons.visibility_off_sharp))
+                    : null),
+          ),
         ),
         isOnError
             ? Text(

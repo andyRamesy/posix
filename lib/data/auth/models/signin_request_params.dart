@@ -1,12 +1,12 @@
 class SigninRequestParams {
-  final String email;
+  final String username;
   final String password;
 
-  SigninRequestParams({required this.email, required this.password});
+  SigninRequestParams({required this.username, required this.password});
 
   Map<String, dynamic> toMap() {
     return {
-      'email': email,
+      'username': username,
       'password': password,
     };
   } 

@@ -6,10 +6,12 @@ import 'package:posix/common/widgets/buttons/custom_button.dart';
 import 'package:posix/core/configs/theme/app_color.dart';
 import 'package:posix/core/configs/theme/app_theme.dart';
 import 'package:posix/data/auth/models/signup_request_params.dart';
+import 'package:posix/presentation/auth/bloc/signin_cubit.dart';
 import 'package:posix/presentation/auth/bloc/signup_cubit.dart';
 import 'package:posix/presentation/auth/pages/signin.dart';
 import 'package:posix/presentation/auth/widgets/custom_password_textfield.dart';
 import 'package:posix/presentation/home/pages/home.dart';
+import 'package:posix/service_locator.dart';
 
 enum PasswordFieldType { password, confirmPassword }
 
@@ -40,6 +42,9 @@ class _SignupPageState extends State<SignupPage> {
   String _notMatchErrorMsg = '';
   bool _onNotMatchingConfirmPassword = false;
 
+  bool _usernameHasError = false;
+  bool _passwordHasError = false;
+  bool _confirmPasswordHasError = false;
   bool _formHasError = false;
 
   _toggleObscuredPassword(PasswordFieldType fieldType) {
@@ -63,14 +68,19 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   Widget _pseudoField() {
-    return TextField(
-      controller: _pseudoController,
-      decoration: const InputDecoration(hintText: "Pseudo"),
+    return CustomTextField(
+      textController: _pseudoController,
+      isOnError: _onEmptyUsername,
+      errorText: _emptyUsername,
+      hintText: "Pseudo",
+      fieldType: FieldType.text,
+      hasError: _usernameHasError,
     );
   }
 
   Widget _passwordField() {
     return CustomTextField(
+      hasError: _passwordHasError,
       hintText: 'Password',
       textController: _passwordController,
       isObscureText: _isObscurePassword,
@@ -94,6 +104,7 @@ class _SignupPageState extends State<SignupPage> {
           _toggleObscuredPassword(PasswordFieldType.confirmPassword),
       hintText: 'Confirm password',
       fieldType: FieldType.password,
+      hasError: _confirmPasswordHasError,
     );
   }
 
@@ -117,20 +128,20 @@ class _SignupPageState extends State<SignupPage> {
       if (username.isEmpty) {
         _emptyUsername = 'Username must not be empty';
         _onEmptyUsername = true;
-        _formHasError = true;
+        _usernameHasError = true;
       }
 
       if (password.isEmpty) {
         _emptyErrorMsg = 'password must not be empty';
         _onEmpty = true;
-        _formHasError = true;
+        _passwordHasError = true;
       }
 
       if (confirmPassword.isEmpty) {
         _emptyConfirmPasswordErrorMsg = 'confirm password must not be empty';
         _onEmptyConfirmPassword = true;
         _onNotMatchingConfirmPassword = true;
-        _formHasError = true;
+        _confirmPasswordHasError = true;
       }
 
       if (password != confirmPassword) {
@@ -173,7 +184,12 @@ class _SignupPageState extends State<SignupPage> {
             style: AppTheme.appTheme.textTheme.labelLarge,
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                AppNavigation.push(context, SigninPage());
+                AppNavigation.push(
+                    context,
+                    BlocProvider(
+                      create: (context) => sl<SigninCubit>(),
+                      child: const SigninPage(),
+                    ));
               },
           )
         ],
@@ -187,7 +203,11 @@ class _SignupPageState extends State<SignupPage> {
       listener: (context, state) {
         if (state is SignupFailed) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.errorMsg)),
+            SnackBar(
+                content: Text(
+              state.errorMsg,
+              style: TextStyle(color: AppColors.errorText),
+            )),
           );
         } else if (state is SignupSuccess) {
           AppNavigation.pushAndRemove(context, const HomePage());

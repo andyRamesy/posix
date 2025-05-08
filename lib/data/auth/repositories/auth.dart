@@ -14,7 +14,9 @@ class AuthRepositoryImpl extends AuthRepository {
       return Left(error);
     }, (data) async {
       //todo sharedPref
-
+      final SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      sharedPreferences.setString('token', data['token']);
       return Right(data);
     });
   }
