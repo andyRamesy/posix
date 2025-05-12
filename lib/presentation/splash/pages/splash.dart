@@ -7,7 +7,6 @@ import 'package:posix/presentation/home/pages/home.dart';
 import 'package:posix/presentation/splash/bloc/splash_cubit.dart';
 import 'package:posix/presentation/splash/bloc/splash_state.dart';
 import 'package:posix/service_locator.dart';
-
 import '../../../core/configs/assets/app_images.dart';
 
 class SplashPage extends StatefulWidget {
@@ -27,7 +26,6 @@ class _SplashPageState extends State<SplashPage> {
             AppNavigation.pushReplacement(context,BlocProvider(
               create: (context) => sl<SigninCubit>(),
               child: SigninPage(),
-              
             ));
           } else if (state is Authenticated) {
             AppNavigation.pushReplacement(context, HomePage());

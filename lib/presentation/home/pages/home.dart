@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:posix/presentation/home/bloc/user_location_cubit.dart';
 import 'package:posix/presentation/home/pages/custom_map.dart';
 
 import 'package:posix/presentation/home/pages/friend_list.dart';
@@ -19,25 +21,28 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: pageList[currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            label: 'Map',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            label: 'Friends',
-          ),
-        ],
-        currentIndex: currentIndex,
-        onTap: (index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
+    return BlocProvider(
+      create: (context) => UserLocationCubit()..getUserLocation(),
+      child: Scaffold(
+        body: pageList[currentIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.map),
+              label: 'Map',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.people),
+              label: 'Friends',
+            ),
+          ],
+          currentIndex: currentIndex,
+          onTap: (index) {
+            setState(() {
+              currentIndex = index;
+            });
+          },
+        ),
       ),
     );
   }
