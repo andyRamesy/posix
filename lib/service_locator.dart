@@ -12,6 +12,7 @@ import 'package:posix/domain/auth/repositories/auth_biometric.dart';
 import 'package:posix/domain/auth/usecases/auth_biometric.dart';
 import 'package:posix/domain/auth/usecases/is_device_supported.dart';
 import 'package:posix/domain/auth/usecases/is_logged_in.dart';
+import 'package:posix/domain/auth/usecases/logout.dart';
 import 'package:posix/domain/auth/usecases/signin.dart';
 import 'package:posix/domain/auth/usecases/signup.dart';
 import 'package:posix/domain/user_location/repositories/user_location.dart';
@@ -43,6 +44,7 @@ void setupServiceLocator() {
   sl.registerSingleton<SignupUseCase>(SignupUseCase());
   sl.registerSingleton<SigninUseCase>(SigninUseCase());
   sl.registerSingleton<IsLoggedInUseCase>(IsLoggedInUseCase());
+  sl.registerSingleton<LogoutUseCase>(LogoutUseCase());
 
   //cubits Auth
   sl.registerFactory<SignupCubit>(

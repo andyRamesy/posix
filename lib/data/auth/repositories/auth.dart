@@ -47,4 +47,11 @@ class AuthRepositoryImpl extends AuthRepository {
       return true;
     }
   }
+
+  @override
+  Future logout() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    sharedPreferences.remove('token');
+  }
 }
