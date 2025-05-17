@@ -5,6 +5,8 @@ import 'package:posix/data/auth/repositories/auth.dart';
 import 'package:posix/data/auth/repositories/auth_biometric.dart';
 import 'package:posix/data/auth/sources/auth_biometric_api_service.dart';
 import 'package:posix/data/auth/sources/auth_api_service.dart';
+import 'package:posix/data/contact/repositories/contact.dart';
+import 'package:posix/data/contact/sources/contact_services.dart';
 import 'package:posix/data/user_location/repositories/user_location.dart';
 import 'package:posix/data/user_location/sources/user_location_services.dart';
 import 'package:posix/domain/auth/repositories/auth.dart';
@@ -15,6 +17,8 @@ import 'package:posix/domain/auth/usecases/is_logged_in.dart';
 import 'package:posix/domain/auth/usecases/logout.dart';
 import 'package:posix/domain/auth/usecases/signin.dart';
 import 'package:posix/domain/auth/usecases/signup.dart';
+import 'package:posix/domain/contact/repositories/contact.dart';
+import 'package:posix/domain/contact/usecases/contact_list.dart';
 import 'package:posix/domain/user_location/repositories/user_location.dart';
 import 'package:posix/domain/user_location/usecases/retrieve_user_location.dart';
 import 'package:posix/presentation/auth/bloc/signin_cubit.dart';
@@ -30,21 +34,27 @@ void setupServiceLocator() {
   sl.registerSingleton<AuthBiometricService>(AuthBiometricApiServiceImpl());
   sl.registerSingleton<AuthApiService>(AuthApiServiceImpl());
   sl.registerSingleton<UserLocationServices>(UserLocationServicesImpl());
+  sl.registerSingleton<ContactServices>(ContactServicesImpl());
 
   //respositories
   sl.registerSingleton<AuthBiometricRepository>(AuthBiometricRepositoryImpl());
   sl.registerSingleton<AuthRepository>(AuthRepositoryImpl());
   sl.registerSingleton<UserLocationRepository>(UserLocationRepositoryImpl());
+  sl.registerSingleton<ContactRepository>(ContactRepositoryImpl());
 
   //Auth biometric usecases
   sl.registerSingleton<IsDeviceSupportedUseCase>(IsDeviceSupportedUseCase());
   sl.registerSingleton<AuthenticateUseCase>(AuthenticateUseCase());
+
 
   //Simple Auth usecases
   sl.registerSingleton<SignupUseCase>(SignupUseCase());
   sl.registerSingleton<SigninUseCase>(SigninUseCase());
   sl.registerSingleton<IsLoggedInUseCase>(IsLoggedInUseCase());
   sl.registerSingleton<LogoutUseCase>(LogoutUseCase());
+
+  //Contact usecase
+  sl.registerSingleton<GetContactListUseCase>(GetContactListUseCase());
 
   //cubits Auth
   sl.registerFactory<SignupCubit>(

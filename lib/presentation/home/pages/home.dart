@@ -7,10 +7,12 @@ import 'package:posix/core/configs/theme/app_theme.dart';
 import 'package:posix/domain/auth/usecases/logout.dart';
 import 'package:posix/presentation/auth/bloc/signin_cubit.dart';
 import 'package:posix/presentation/auth/pages/signin.dart';
+import 'package:posix/presentation/contact/pages/contact_list.dart';
 import 'package:posix/presentation/home/bloc/user_location_cubit.dart';
-import 'package:posix/presentation/home/pages/custom_map.dart';
 
-import 'package:posix/presentation/home/pages/friend_list.dart';
+import 'package:posix/presentation/home/widget/custom_map.dart';
+
+import 'package:posix/presentation/home/widget/friend_list.dart';
 import 'package:posix/service_locator.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,11 +23,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<Widget> pageList = [
-    CustomMap(),
-    FriendList(),
-  ];
-  int currentIndex = 0;
+  final Map<String, Widget> pageList = {
+    'map': CustomMap(),
+    'contact_list': ContactList(),
+    'friend_list': FriendList(),
+  };
+  String currentKey = 'map';
 
   logout() {
     Future.delayed(Duration(seconds: 1), () {
@@ -40,6 +43,14 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  String _getKeyForIndex(int index) {
+    return pageList.keys.elementAt(index);
+  }
+
+  int _getIndexForKey(String key) {
+    return pageList.keys.toList().indexOf(key);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -47,7 +58,11 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(currentIndex == 0 ? 'Map' : 'Friends'),
+          title: Text(currentKey == 'map'
+              ? 'Map'
+              : currentKey == 'contact_list'
+                  ? 'Contacts'
+                  : 'Friends',style: AppTheme.appTheme.textTheme.headlineLarge,),
         ),
         endDrawer: Drawer(
           child: ListView(
@@ -81,7 +96,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        body: pageList[currentIndex],
+        body: pageList[currentKey] ?? const SizedBox.shrink(),
         bottomNavigationBar: BottomNavigationBar(
           items: const [
             BottomNavigationBarItem(
@@ -89,14 +104,18 @@ class _HomePageState extends State<HomePage> {
               label: 'Map',
             ),
             BottomNavigationBarItem(
+              icon: Icon(Icons.contact_page),
+              label: 'Contacts',
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Icons.people),
               label: 'Friends',
             ),
           ],
-          currentIndex: currentIndex,
+          currentIndex: _getIndexForKey(currentKey),
           onTap: (index) {
             setState(() {
-              currentIndex = index;
+              currentKey = _getKeyForIndex(index);
             });
           },
         ),

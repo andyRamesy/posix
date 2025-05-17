@@ -43,6 +43,7 @@ dependencies:
   flutter_map: 
   geolocator:
   latlong2:
+  flutter_contacts:
 
 
 dev_dependencies:
