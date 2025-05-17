@@ -113,6 +113,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
           currentIndex: _getIndexForKey(currentKey),
+          selectedItemColor: AppColors.primary,
           onTap: (index) {
             setState(() {
               currentKey = _getKeyForIndex(index);
