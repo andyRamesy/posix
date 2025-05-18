@@ -19,7 +19,11 @@ class ContactServicesImpl implements ContactServices {
     }
 
     try {
-      contacts = await FlutterContacts.getContacts();
+      contacts = await FlutterContacts.getContacts(
+        withProperties: true,
+        withThumbnail: true,
+        withPhoto: true,
+      );
       return Right(contacts);
     } catch (e) {
       return Left(e);

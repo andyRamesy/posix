@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:posix/core/configs/theme/app_color.dart';
 import 'package:posix/core/configs/theme/app_theme.dart';
 import 'package:posix/presentation/contact/bloc/contact_cubit.dart';
+import 'package:posix/presentation/contact/widget/contact_tile.dart';
 
 class ContactList extends StatefulWidget {
   const ContactList({super.key});
@@ -26,10 +27,9 @@ class _ContactListState extends State<ContactList> {
               decoration: BoxDecoration(
                 color: AppColors.scaffoldBackgroundColor,
               ),
-              child: ListView.builder(
-                  itemBuilder: (context, index) => ListTile(
-                        title: Text(state.contactList[index].displayName),
-                      )),
+              child: ContactTile(
+                contacts: state.contactList,
+              ),
             );
           } else if (state is ContactFailed) {
             return const Center(child: Text('Error loading contacts'));

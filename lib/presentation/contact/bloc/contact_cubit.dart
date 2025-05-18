@@ -8,9 +8,15 @@ part 'contact_state.dart';
 class ContactCubit extends Cubit<ContactState> {
   ContactCubit() : super(ContactInitial());
 
-  void getContactList() async{
+  void getContactList() async {
     emit(ContactLoading());
     var contactList = await sl<GetContactListUseCase>().call(false);
-    contactList.fold((error) => emit(ContactFailed()), (data) => emit(ContactLoaded(contactList: data)));
+    contactList.fold(
+      (error) => emit(ContactFailed()),
+      (data) {
+        
+        emit(ContactLoaded(contactList: data));
+      },
+    );
   }
 }
