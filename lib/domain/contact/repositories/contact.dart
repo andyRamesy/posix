@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
 
 abstract class ContactRepository {
-  Future<Either> getContactList();
+  Future<Either> getContactList({int offset, int limit});
 }

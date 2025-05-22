@@ -2,45 +2,49 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:posix/core/configs/theme/app_color.dart';
 
 class ContactTile extends StatelessWidget {
-  final List<Contact> contacts;
+  final Contact contacts;
 
   const ContactTile({
     super.key,
     required this.contacts,
   });
 
-  imageToShow(Uint8List? image) {
+  Widget imageToShow(Uint8List? image) {
     if (image != null) {
-      return Image.memory(Uint8List.fromList(image));
+      return ClipOval(
+        child: Image.memory(
+          image,
+          fit: BoxFit.cover,
+          width: 40,
+          height: 40,
+        ),
+      );
     } else {
-      return const Icon(Icons.person);
+      return const Icon(Icons.person, color: Colors.grey);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    Uint8List? imageThumbnail =
+        contacts.photo ?? contacts.thumbnail ?? contacts.photoOrThumbnail;
     return Container(
       padding: const EdgeInsets.all(16.0),
-      child: ListView.builder(
-          itemCount: contacts.length,
-          itemBuilder: (context, index) {
-            Uint8List? imageThumbnail = contacts[index].photo ??
-                contacts[index].thumbnail ??
-                contacts[index].photoOrThumbnail;
-
-            return ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Colors.blue,
-                child: imageToShow(imageThumbnail),
-              ),
-              title: Text(contacts[index].displayName),
-              subtitle: Text(contacts[index].phones.isNotEmpty
-                  ? contacts[index].phones.first.number
-                  : 'No phone number'),
-            );
-          }),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: AppColors.customWhite,
+          child: imageToShow(imageThumbnail),
+        ),
+        title: Text(contacts.displayName),
+        subtitle: Text(
+          contacts.phones.isNotEmpty
+              ? contacts.phones.first.number
+              : 'No phone number',
+        ),
+      ),
     );
   }
 }

@@ -6,16 +6,47 @@ import 'package:posix/service_locator.dart';
 part 'contact_state.dart';
 
 class ContactCubit extends Cubit<ContactState> {
+  List<Contact> contactList = [];
+  bool isFetching = false;
+  int _offset = 0;
+  int _limit = 20;
+  bool hasMore = true;
+
   ContactCubit() : super(ContactInitial());
 
   void getContactList() async {
     emit(ContactLoading());
-    var contactList = await sl<GetContactListUseCase>().call(false);
-    contactList.fold(
+    _offset = 0;
+    contactList.clear();
+    final result = await sl<GetContactListUseCase>().call({'offset': _offset, 'limit': _limit});
+
+    result.fold(
       (error) => emit(ContactFailed()),
       (data) {
-        
-        emit(ContactLoaded(contactList: data));
+        contactList.addAll(data);
+        hasMore = data.length == _limit;
+        emit(ContactLoaded(contactList: contactList));
+      },
+    );
+  }
+
+  void fetchMoreContacts() async {
+    if (isFetching || !hasMore) return;
+    isFetching = true;
+    _offset += _limit;
+
+    final result = await sl<GetContactListUseCase>().call({'offset': _offset, 'limit': _limit});
+
+    result.fold(
+      (error) {
+        isFetching = false;
+        emit(ContactFailed());
+      },
+      (data) {
+        contactList.addAll(data);
+        hasMore = data.length == _limit;
+        emit(ContactLoaded(contactList: contactList));
+        isFetching = false;
       },
     );
   }
