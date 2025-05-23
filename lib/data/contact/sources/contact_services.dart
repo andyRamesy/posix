@@ -21,8 +21,6 @@ class ContactServicesImpl implements ContactServices {
         withThumbnail: true,
         withPhoto: true,
       );
-      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-      sharedPreferences.setString('contacts', contacts.toString());
       
       final paginated = contacts.skip(offset).take(limit).toList();
       return Right(paginated);

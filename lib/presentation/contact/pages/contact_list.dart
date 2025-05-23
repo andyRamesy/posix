@@ -41,13 +41,6 @@ class _ContactListState extends State<ContactList> {
 
   @override
   Widget build(BuildContext context) {
-    Widget imageToShow(Uint8List? image) {
-      if (image != null) {
-        return Image.memory(Uint8List.fromList(image));
-      }
-      return const Icon(Icons.person);
-    }
-
     return BlocProvider.value(
       value: _contactCubit,
       child: BlocBuilder<ContactCubit, ContactState>(
