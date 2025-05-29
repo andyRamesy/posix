@@ -12,3 +12,8 @@ final class ContactLoaded extends ContactState {
 }
 
 final class ContactFailed extends ContactState {}
+
+final class ContactEmpty extends ContactState {
+  final String message;
+  ContactEmpty({required this.message});
+}

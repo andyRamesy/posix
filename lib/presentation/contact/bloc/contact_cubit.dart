@@ -23,6 +23,11 @@ class ContactCubit extends Cubit<ContactState> {
     result.fold(
       (error) => emit(ContactFailed()),
       (data) {
+        if(data.isEmpty) {
+          emit(ContactEmpty(message: 'Your contact list is empty'));
+          return;
+        }
+        isFetching = false;
         contactList.addAll(data);
         hasMore = data.length == _limit;
         emit(ContactLoaded(contactList: contactList));

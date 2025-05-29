@@ -117,6 +117,7 @@ class _SigninPageState extends State<SigninPage> {
   Widget _signupText(BuildContext context) {
     return Text.rich(
       TextSpan(
+        style: AppTheme.appTheme.textTheme.bodySmall,
         children: [
           const TextSpan(text: "Don't have account ? "),
           TextSpan(

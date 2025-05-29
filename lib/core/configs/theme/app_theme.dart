@@ -3,7 +3,7 @@ import 'package:posix/core/configs/theme/app_color.dart';
 
 class AppTheme {
   static const TextStyle _baseTextStyle = TextStyle(
-    fontFamily: "ProximaNova",
+    fontFamily: "whitrabt",
   );
   static final appTheme = ThemeData(
     brightness: Brightness.dark,
@@ -28,6 +28,12 @@ class AppTheme {
         fontWeight: FontWeight.w900,
         letterSpacing: 1.5,
         fontSize: 16,
+        color: AppColors.text,
+      ),
+      bodySmall: _baseTextStyle.copyWith(
+        fontWeight: FontWeight.w900,
+        letterSpacing: 1.5,
+        fontSize: 13,
         color: AppColors.text,
       ),
       labelLarge: _baseTextStyle.copyWith(

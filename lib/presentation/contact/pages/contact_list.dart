@@ -55,13 +55,21 @@ class _ContactListState extends State<ContactList> {
                 itemBuilder: (context, index) {
                   if (index < state.contactList.length) {
                     return ContactTile(contacts: state.contactList[index]);
-                  } else {
+                  } else if (_contactCubit.hasMore) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+
+                  }else {
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
                   }
                 });
-          } else if (state is ContactFailed) {
+          } else if (state is ContactEmpty) {
+            return Center(child: Text(state.message));
+          }
+           else if (state is ContactFailed) {
             return const Center(child: Text('Error loading contacts'));
           }
           return Container();

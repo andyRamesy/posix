@@ -58,11 +58,14 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(currentKey == 'map'
-              ? 'Map'
-              : currentKey == 'contact_list'
-                  ? 'Contacts'
-                  : 'Friends',style: AppTheme.appTheme.textTheme.headlineLarge,),
+          title: Text(
+            currentKey == 'map'
+                ? 'Map'
+                : currentKey == 'contact_list'
+                    ? 'Contacts'
+                    : 'Friends',
+            style: AppTheme.appTheme.textTheme.headlineLarge,
+          ),
         ),
         endDrawer: Drawer(
           child: ListView(
@@ -98,6 +101,8 @@ class _HomePageState extends State<HomePage> {
         ),
         body: pageList[currentKey] ?? const SizedBox.shrink(),
         bottomNavigationBar: BottomNavigationBar(
+          selectedLabelStyle: AppTheme.appTheme.textTheme.labelLarge,
+          unselectedLabelStyle: AppTheme.appTheme.textTheme.labelLarge,
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.map),

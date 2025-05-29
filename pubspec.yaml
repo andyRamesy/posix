@@ -80,3 +80,7 @@ flutter:
         - asset: assets/fonts/ProximaNova-regular.otf
         - asset: assets/fonts/ProximaNova-thin.otf
           weight: 700
+    - family: whitrabt
+      fonts:
+        - asset: assets/fonts/whitrabt-regular.ttf
+          weight: 700
