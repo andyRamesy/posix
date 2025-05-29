@@ -13,5 +13,5 @@
 
 -------------------------------------------
 
--identity KYC
--pdp
+- add phon number as pseudo in register
+- create api that search by phon number then compare it to the contact list to get the contact name
