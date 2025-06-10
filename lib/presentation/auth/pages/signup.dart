@@ -23,6 +23,7 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  final TextEditingController _phonNumberController = TextEditingController();
   final TextEditingController _pseudoController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
@@ -30,8 +31,12 @@ class _SignupPageState extends State<SignupPage> {
   bool _isObscurePassword = true;
   bool _isObscurePasswordConfirmation = true;
 
+  String _emptyPhonNumber = '';
+  bool _onEmptyPhonNumber = false;
+
   String _emptyUsername = '';
   bool _onEmptyUsername = false;
+  
 
   String _emptyErrorMsg = '';
   bool _onEmpty = false;
@@ -42,6 +47,7 @@ class _SignupPageState extends State<SignupPage> {
   String _notMatchErrorMsg = '';
   bool _onNotMatchingConfirmPassword = false;
 
+  bool _phonNumberHasError = false;
   bool _usernameHasError = false;
   bool _passwordHasError = false;
   bool _confirmPasswordHasError = false;
@@ -67,11 +73,22 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
+  Widget _phonNumberField() {
+    return CustomTextField(
+      textController: _phonNumberController,
+      isOnError: _onEmptyPhonNumber,
+      errorText: _emptyPhonNumber,
+      hintText: "Phone number",
+      fieldType: FieldType.text,
+      hasError: _phonNumberHasError,
+    );
+  }
+
   Widget _pseudoField() {
     return CustomTextField(
       textController: _pseudoController,
       isOnError: _onEmptyUsername,
-      errorText: _emptyUsername,
+      errorText: _emptyPhonNumber,
       hintText: "Pseudo",
       fieldType: FieldType.text,
       hasError: _usernameHasError,
@@ -109,6 +126,7 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   bool _isNotvalidPassField() {
+    String phonNumber = _phonNumberController.text;
     String password = _passwordController.text;
     String confirmPassword = _confirmPasswordController.text;
     String username = _pseudoController.text;
@@ -118,12 +136,21 @@ class _SignupPageState extends State<SignupPage> {
       _onEmpty = false;
       _onEmptyConfirmPassword = false;
       _onNotMatchingConfirmPassword = false;
+      _onEmptyPhonNumber = false;
       _formHasError = false;
 
+      _emptyPhonNumber = '';
       _emptyUsername = '';
       _emptyErrorMsg = '';
       _emptyConfirmPasswordErrorMsg = '';
       _notMatchErrorMsg = '';
+
+
+      if(phonNumber.isEmpty){
+        _emptyPhonNumber = 'Phone number must not be empty';
+        _onEmptyPhonNumber = true;
+        _phonNumberHasError = true;
+      }
 
       if (username.isEmpty) {
         _emptyUsername = 'Username must not be empty';
@@ -161,7 +188,9 @@ class _SignupPageState extends State<SignupPage> {
           text: "Register",
           onPressed: () async {
             if (_isNotvalidPassField()) return;
+            print("phon number: ${_phonNumberController.text.length}");
             final params = SignupRequestParams(
+              phonNumber: _phonNumberController.text,
               username: _pseudoController.text,
               password: _passwordController.text,
             );
@@ -217,24 +246,28 @@ class _SignupPageState extends State<SignupPage> {
         backgroundColor: AppColors.scaffoldBackgroundColor,
         body: SafeArea(
           minimum: const EdgeInsets.only(top: 100, right: 16, left: 16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            spacing: 10,
-            children: [
-              _signupText(),
-              const SizedBox(
-                height: 30,
-              ),
-              _pseudoField(),
-              _passwordField(),
-              _confirmPasswordField(),
-              const SizedBox(
-                height: 5,
-              ),
-              _signupButton(context),
-              _siginText(context)
-            ],
+          child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              spacing: 10,
+              children: [
+                _signupText(),
+                const SizedBox(
+                  height: 30,
+                ),
+                _phonNumberField(),
+                _pseudoField(),
+                _passwordField(),
+                _confirmPasswordField(),
+                const SizedBox(
+                  height: 5,
+                ),
+                _signupButton(context),
+                _siginText(context)
+              ],
+            ),
           ),
         ),
       ),
