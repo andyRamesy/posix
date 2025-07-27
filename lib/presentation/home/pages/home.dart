@@ -8,6 +8,7 @@ import 'package:posix/domain/auth/usecases/logout.dart';
 import 'package:posix/presentation/auth/bloc/signin_cubit.dart';
 import 'package:posix/presentation/auth/pages/signin.dart';
 import 'package:posix/presentation/contact/pages/contact_list.dart';
+import 'package:posix/presentation/friends/pages/friends.dart';
 import 'package:posix/presentation/home/bloc/user_location_cubit.dart';
 
 import 'package:posix/presentation/home/widget/custom_map.dart';
@@ -26,7 +27,7 @@ class _HomePageState extends State<HomePage> {
   final Map<String, Widget> pageList = {
     'map': CustomMap(),
     'contact_list': ContactList(),
-    'friend_list': FriendList(),
+    'friend_list': FriendsPage(),
   };
   String currentKey = 'map';
 
