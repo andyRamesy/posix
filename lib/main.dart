@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:posix/presentation/auth/bloc/biometric_auth_cubit.dart';
 import 'package:posix/presentation/splash/bloc/splash_cubit.dart';
 import 'package:posix/presentation/splash/pages/splash.dart';
 import 'package:posix/service_locator.dart';

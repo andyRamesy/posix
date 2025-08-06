@@ -34,6 +34,28 @@ class ContactTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16.0),
       child: ListTile(
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: const Text("Send invitation"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      print("Sending invitation to ${contacts.phones.first.number}");
+                    },
+                    child: const Text("Send"),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text("Cancel"),
+                  ),
+                ],
+              );
+            },
+          );
+        },
         leading: CircleAvatar(
           backgroundColor: AppColors.customWhite,
           child: imageToShow(imageThumbnail),

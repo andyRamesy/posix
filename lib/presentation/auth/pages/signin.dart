@@ -9,7 +9,7 @@ import 'package:posix/data/auth/models/signin_request_params.dart';
 import 'package:posix/presentation/auth/bloc/signin_cubit.dart';
 import 'package:posix/presentation/auth/bloc/signup_cubit.dart';
 import 'package:posix/presentation/auth/pages/signup.dart';
-import 'package:posix/presentation/auth/widgets/custom_password_textfield.dart';
+import 'package:posix/presentation/auth/widgets/custom_textfield.dart';
 import 'package:posix/presentation/home/pages/home.dart';
 import 'package:posix/service_locator.dart';
 
