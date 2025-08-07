@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_contacts/contact.dart';
+import 'package:posix/data/friend_invit/models/send_invit_request_params.dart';
 import 'package:posix/domain/contact/usecases/contact_list.dart';
+import 'package:posix/domain/friend_invit/usecases/send_invit.dart';
 import 'package:posix/service_locator.dart';
 
 part 'contact_state.dart';
@@ -18,12 +20,13 @@ class ContactCubit extends Cubit<ContactState> {
     emit(ContactLoading());
     _offset = 0;
     contactList.clear();
-    final result = await sl<GetContactListUseCase>().call({'offset': _offset, 'limit': _limit});
+    final result = await sl<GetContactListUseCase>()
+        .call({'offset': _offset, 'limit': _limit});
 
     result.fold(
       (error) => emit(ContactFailed()),
       (data) {
-        if(data.isEmpty) {
+        if (data.isEmpty) {
           emit(ContactEmpty(message: 'Your contact list is empty'));
           return;
         }
@@ -40,7 +43,8 @@ class ContactCubit extends Cubit<ContactState> {
     isFetching = true;
     _offset += _limit;
 
-    final result = await sl<GetContactListUseCase>().call({'offset': _offset, 'limit': _limit});
+    final result = await sl<GetContactListUseCase>()
+        .call({'offset': _offset, 'limit': _limit});
 
     result.fold(
       (error) {
@@ -54,5 +58,18 @@ class ContactCubit extends Cubit<ContactState> {
         isFetching = false;
       },
     );
+  }
+
+  Future<void> sendInvitation(SendInvitRequestParams params) async {
+    emit(ContactSendInvitationLoading());
+
+    var data = await sl<SendInvitUseCase>().call(params);
+
+    data.fold((error) {
+      final String errorMessage = error[0];
+      emit(ContactSendInvitationFailed(errorMessage: errorMessage));
+    }, (message) {
+      emit(ContactSendInvitationSuccess(message: message));
+    });
   }
 }

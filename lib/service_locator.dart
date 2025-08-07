@@ -27,6 +27,7 @@ import 'package:posix/domain/user_location/repositories/user_location.dart';
 import 'package:posix/domain/user_location/usecases/retrieve_user_location.dart';
 import 'package:posix/presentation/auth/bloc/signin_cubit.dart';
 import 'package:posix/presentation/auth/bloc/signup_cubit.dart';
+import 'package:posix/presentation/contact/bloc/contact_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -73,4 +74,7 @@ void setupServiceLocator() {
 
   //Friend invit usecase
   sl.registerSingleton(SendInvitUseCase());
+
+  //cubits Send invit
+  sl.registerFactory<ContactCubit>(() => ContactCubit());
 }
