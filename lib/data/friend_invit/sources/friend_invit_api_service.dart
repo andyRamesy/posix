@@ -16,7 +16,8 @@ class FriendInvitApiServiceImpl implements FriendInvitApiService {
           await sl<DioClient>().post(ApiUrl.sendInvitation, data: receiverPhon);
       return Right(response);
     } catch (e) {
-      return Left("Error sending invitation: $e");
+      print("friend invite api service error $e");
+      return Left("Error in api service sending invitation: $e");
     }
   }
 }

@@ -66,6 +66,7 @@ class ContactCubit extends Cubit<ContactState> {
     var data = await sl<SendInvitUseCase>().call(params);
 
     data.fold((error) {
+      print("Error sending invitation: $error");
       final String errorMessage = error[0];
       emit(ContactSendInvitationFailed(errorMessage: errorMessage));
     }, (message) {
