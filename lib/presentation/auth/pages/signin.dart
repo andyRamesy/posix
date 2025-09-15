@@ -21,7 +21,7 @@ class SigninPage extends StatefulWidget {
 }
 
 class _SigninPageState extends State<SigninPage> {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _phonNumberController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isObscure = true;
   final _passwordFieldKey = GlobalKey<FormFieldState<String>>();
@@ -47,11 +47,11 @@ class _SigninPageState extends State<SigninPage> {
 
   Widget _usernameField() {
     return CustomTextField(
-      textController: _usernameController,
+      textController: _phonNumberController,
       isOnError: _onEmptyUsername,
       errorText: _emptyUsernameErrorMsg,
-      hintText: "Pseudo",
-      fieldType: FieldType.text,
+      hintText: "Phon number",
+      fieldType: FieldType.number,
       hasError: _formHasError,
     );
   }
@@ -70,7 +70,7 @@ class _SigninPageState extends State<SigninPage> {
   }
 
   bool _isNotValidForm() {
-    String pseudo = _usernameController.text;
+    String pseudo = _phonNumberController.text;
     String password = _passwordController.text;
 
     setState(() {
@@ -103,7 +103,7 @@ class _SigninPageState extends State<SigninPage> {
           onPressed: () {
             if (_isNotValidForm()) return;
             final params = SigninRequestParams(
-                username: _usernameController.text,
+                phonNumber: _phonNumberController.text,
                 password: _passwordController.text);
             context.read<SigninCubit>().signin(params);
             print('valid form');

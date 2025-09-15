@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:posix/core/configs/theme/app_color.dart';
 import 'package:posix/core/configs/theme/app_theme.dart';
 
-enum FieldType { password, text }
+enum FieldType { password, text, number }
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController textController;
@@ -40,6 +40,9 @@ class CustomTextField extends StatelessWidget {
                       Border(bottom: BorderSide(color: AppColors.errorText)))
               : null,
           child: TextField(
+            keyboardType: fieldType == FieldType.number
+                ? TextInputType.phone
+                : TextInputType.text,
             controller: textController,
             obscureText: isObscureText,
             decoration: InputDecoration(

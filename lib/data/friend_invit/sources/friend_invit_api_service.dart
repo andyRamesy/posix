@@ -13,7 +13,7 @@ class FriendInvitApiServiceImpl implements FriendInvitApiService {
   Future<Either> sendInvitation(SendInvitRequestParams receiverPhon) async {
     try {
       var response =
-          await sl<DioClient>().post(ApiUrl.sendInvitation, data: receiverPhon);
+          await sl<DioClient>().post(ApiUrl.sendInvitation, data: receiverPhon.toMap());
       return Right(response);
     } catch (e) {
       print("friend invite api service error $e");

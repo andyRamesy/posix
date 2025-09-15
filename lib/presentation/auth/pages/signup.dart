@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:posix/common/navigation/app_navigation.dart';
 import 'package:posix/common/widgets/buttons/custom_button.dart';
+import 'package:posix/common/widgets/buttons/custom_dropdown.dart';
 import 'package:posix/core/configs/theme/app_color.dart';
 import 'package:posix/core/configs/theme/app_theme.dart';
 import 'package:posix/data/auth/models/signup_request_params.dart';
@@ -36,7 +37,6 @@ class _SignupPageState extends State<SignupPage> {
 
   String _emptyUsername = '';
   bool _onEmptyUsername = false;
-  
 
   String _emptyErrorMsg = '';
   bool _onEmpty = false;
@@ -52,6 +52,8 @@ class _SignupPageState extends State<SignupPage> {
   bool _passwordHasError = false;
   bool _confirmPasswordHasError = false;
   bool _formHasError = false;
+
+  String _selectedRole = "";
 
   _toggleObscuredPassword(PasswordFieldType fieldType) {
     setState(() {
@@ -145,8 +147,7 @@ class _SignupPageState extends State<SignupPage> {
       _emptyConfirmPasswordErrorMsg = '';
       _notMatchErrorMsg = '';
 
-
-      if(phonNumber.isEmpty){
+      if (phonNumber.isEmpty) {
         _emptyPhonNumber = 'Phone number must not be empty';
         _onEmptyPhonNumber = true;
         _phonNumberHasError = true;
@@ -192,6 +193,7 @@ class _SignupPageState extends State<SignupPage> {
             final params = SignupRequestParams(
               phonNumber: _phonNumberController.text,
               username: _pseudoController.text,
+              role: "Client",
               password: _passwordController.text,
             );
             context.read<SignupCubit>().signup(params);
@@ -224,6 +226,18 @@ class _SignupPageState extends State<SignupPage> {
         ],
       ),
     );
+  }
+
+  Widget _roleSelect(BuildContext context) {
+    return CustomDropdown(
+        labelText: "Role: ",
+        dropdownItems: ["Client", "taximom"],
+        selectedValue: _selectedRole,
+        onDropdownChanged: (String? value) {
+          setState(() {
+            _selectedRole = value!;
+          });
+        });
   }
 
   @override
@@ -259,6 +273,7 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 _phonNumberField(),
                 _pseudoField(),
+                _roleSelect(context),
                 _passwordField(),
                 _confirmPasswordField(),
                 const SizedBox(
